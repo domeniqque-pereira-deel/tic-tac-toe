@@ -44,7 +44,6 @@ import { resetGlobalState } from '@/store'
 import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
-import EventBus from '@/utils/EventBus'
 
 export default {
   name: 'app',
@@ -69,7 +68,7 @@ export default {
     },
 
     togglePlayerOnStrike () {
-      EventBus.$on('strike', _ => this.$store.commit('TOGGLE_PLAYER'))
+      this.$bus.$on('strike', _ => this.$store.commit('TOGGLE_PLAYER'))
     },
 
     setGameOption (optionSelected) {

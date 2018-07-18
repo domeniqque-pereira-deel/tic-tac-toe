@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import EventBus from './../utils/EventBus'
 import { mapState } from 'vuex'
 
 export default {
@@ -20,18 +19,13 @@ export default {
     strike () {
       if (this.freeze && this.value !== '') return
 
-      const cellIndex = parseInt(this.index)
-      const player = this.activePlayer
+      const data = {
+        cellIndex: parseInt(this.index),
+        player: this.activePlayer
+      }
 
-      this.$store.commit('board/STRIKE', {
-        cellIndex,
-        player
-      })
-
-      EventBus.$emit('strike', {
-        cellIndex,
-        player
-      })
+      this.$store.commit('board/STRIKE', data)
+      this.$bus.$emit('strike', data)
     }
   }
 }
