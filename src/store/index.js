@@ -27,6 +27,9 @@ const store = new Vuex.Store({
     },
     SET_GAME_STATE (state, started) {
       state.gameStarted = started
+    },
+    TOGGLE_PLAYER (state) {
+      state.activePlayer = (state.activePlayer === 'X') ? 'O' : 'X'
     }
   },
 

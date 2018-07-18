@@ -1,2 +1,2 @@
 
-export const clone = object => Object.assign({}, object)
+export const clone = object => JSON.parse(JSON.stringify(object))

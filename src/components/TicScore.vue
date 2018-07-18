@@ -1,8 +1,8 @@
 <template>
     <div class="scoreboard">
-        <div class="score-missing" v-show="!isMultiplayer && scoreMissing > 0">
+        <!-- <div class="score-missing" v-show="!isMultiplayer && scoreMissing > 0">
           <span>Missing</span> <span class="signal">+</span>{{ scoreMissing }} <span>{{ sulfixMessage }}</span>
-        </div>
+        </div> -->
 
         <!-- <div class="game-countdown"
           v-show="useCountdownTimer"
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { levels, levelRequirement } from '@/game/level'
+// import { levels, levelRequirement } from '@/game/level'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
@@ -37,21 +37,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([ 'isMultiplayer' ]),
-
-    ...mapState('score'),
-
-    // scoreMissing () {
-    //   let required = levelRequirement[`level_${this.gameLevel + 1}`]
-    //   let missing = required - (this.score.X - this.score.O)
-
-    //   return missing || 0
-    // },
-
-    // sulfixMessage () {
-    //   const lastLevel = levels[Object.keys(levels).slice(-1)[0]] - 1
-    //   return (this.gameLevel < lastLevel) ? 'points to the next level' : 'points to win the game'
-    // }
+    ...mapGetters(['isMultiplayer']),
+    ...mapState(['activePlayer']),
+    ...mapState('score', [
+      'score',
+      'playerPointsClass'
+    ])
   },
 
   methods: {

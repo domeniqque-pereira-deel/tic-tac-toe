@@ -11,7 +11,7 @@
         @game-mode-selected="setGameOption($event)"
         v-show="!gameStarted"/>
 
-      <TicScore ref="score"/>
+      <TicScore ref="score" v-show="gameStarted"/>
 
       <TicBoard v-show="gameStarted"/>
 
@@ -43,14 +43,15 @@ import { mapState, mapGetters } from 'vuex'
 import { resetGlobalState } from '@/store'
 import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
-// import TicScore from '@/components/TicScore.vue'
+import TicScore from '@/components/TicScore.vue'
+import EventBus from '@/utils/EventBus'
 
 export default {
   name: 'app',
   components: {
     TicSelectGameOption,
-    TicBoard
-    // TicScore
+    TicBoard,
+    TicScore
   },
 
   computed: {
@@ -58,9 +59,17 @@ export default {
     ...mapGetters([ 'isMultiplayer' ])
   },
 
+  mounted () {
+    this.togglePlayerOnStrike()
+  },
+
   methods: {
     restartGame () {
       resetGlobalState()
+    },
+
+    togglePlayerOnStrike () {
+      EventBus.$on('strike', _ => this.$store.commit('TOGGLE_PLAYER'))
     },
 
     setGameOption (optionSelected) {
@@ -155,6 +164,7 @@ body {
 .btn-restart {
   background-color: #1C4678;
   color: #fff;
+  margin-top: 15px;
 }
 
 @keyframes fadeIn {

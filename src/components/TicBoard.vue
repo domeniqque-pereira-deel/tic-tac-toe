@@ -2,19 +2,19 @@
   <div class="board-background board-background-blue">
     <table id="board">
       <tr>
-        <TicCell :value="cells[1]"/>
-        <TicCell :value="cells[2]"/>
-        <TicCell :value="cells[3]"/>
+        <TicCell :value="cells[1]" index="1"/>
+        <TicCell :value="cells[2]" index="2"/>
+        <TicCell :value="cells[3]" index="3"/>
       </tr>
       <tr>
-        <TicCell :value="cells[4]"/>
-        <TicCell :value="cells[5]"/>
-        <TicCell :value="cells[6]"/>
+        <TicCell :value="cells[4]" index="4"/>
+        <TicCell :value="cells[5]" index="5"/>
+        <TicCell :value="cells[6]" index="6"/>
       </tr>
       <tr>
-        <TicCell :value="cells[7]"/>
-        <TicCell :value="cells[8]"/>
-        <TicCell :value="cells[9]"/>
+        <TicCell :value="cells[7]" index="7"/>
+        <TicCell :value="cells[8]" index="8"/>
+        <TicCell :value="cells[9]" index="9"/>
       </tr>
     </table>
   </div>

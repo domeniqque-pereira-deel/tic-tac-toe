@@ -1,19 +1,37 @@
 <template>
-  <td :class="[{'frozen': frozen || value !== ''}, cellClass]" @click="strike">{{ value }}</td>
+  <td :class="cellClass" @click="strike">{{ value }}</td>
 </template>
 
 <script>
+import EventBus from './../utils/EventBus'
+import { mapState } from 'vuex'
+
 export default {
-  props: ['value'],
-  data () {
-    return {
-      frozen: false,
-      cellClass: ''
+  props: ['index', 'value'],
+  computed: {
+    ...mapState(['activePlayer']),
+    ...mapState('board', ['freeze']),
+
+    cellClass () {
+      return (this.freeze && this.value !== '') ? 'frozen' : ''
     }
   },
   methods: {
     strike () {
+      if (this.freeze && this.value !== '') return
 
+      const cellIndex = parseInt(this.index)
+      const player = this.activePlayer
+
+      this.$store.commit('board/STRIKE', {
+        cellIndex,
+        player
+      })
+
+      EventBus.$emit('strike', {
+        cellIndex,
+        player
+      })
     }
   }
 }
