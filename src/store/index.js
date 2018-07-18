@@ -30,11 +30,21 @@ const store = new Vuex.Store({
     },
     TOGGLE_PLAYER (state) {
       state.activePlayer = (state.activePlayer === 'X') ? 'O' : 'X'
+    },
+    SET_GAME_STATUS (state, status) {
+      state.gameStatus = status
     }
   },
 
   getters: {
-    isMultiplayer: state => state.gameMode === 'multiplayer'
+    isMultiplayer: state => state.gameMode === 'multiplayer',
+    gameStatusMessage: ({gameStatus, activePlayer}, _, rootState) => {
+      if (gameStatus === 'draw') return 'Draw!'
+
+      const player = rootState.board.winner.player || activePlayer
+
+      return `${player}'s ${gameStatus}!`
+    }
   },
   strict: process.env.NODE_ENV !== 'production'
 })

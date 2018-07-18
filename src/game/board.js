@@ -44,11 +44,11 @@ export function checkForWin (board) {
     if (board[wc[0]] !== '' &&
       board[wc[1]] === board[wc[0]] &&
       board[wc[2]] === board[wc[0]]) {
-      return { win: true, winer: board[wc[0]], condition: wc }
+      return { win: true, winner: board[wc[0]], condition: wc }
     }
   }
 
-  return { win: false, winer: null, condition: null }
+  return { win: false, winner: null, condition: null }
 }
 
 /**

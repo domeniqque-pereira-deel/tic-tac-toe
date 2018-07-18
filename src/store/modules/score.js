@@ -7,7 +7,18 @@ const state = {
   playerPointsClass: ''
 }
 
+const mutations = {
+  INCREMENT_PLAYER_SCORE (state, player) {
+    state.score[player]++
+  },
+
+  DECREMENT_PLAYER_SCORE (state, player) {
+    state.score[player]--
+  }
+}
+
 export default {
   namespaced: true,
-  state
+  state,
+  mutations
 }

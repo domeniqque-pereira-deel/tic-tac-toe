@@ -11,6 +11,12 @@
         @game-mode-selected="setGameOption($event)"
         v-show="!gameStarted"/>
 
+      <p class="status-message"
+        :class="statusMessageClass"
+        v-show="!isMultiplayer && gameStarted">
+        {{ gameStatusMessage }}
+      </p>
+
       <TicScore ref="score" v-show="gameStarted"/>
 
       <TicBoard v-show="gameStarted"/>
@@ -44,6 +50,7 @@ import { resetGlobalState } from '@/store'
 import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
+import { isEmpty } from '@/utils'
 
 export default {
   name: 'app',
@@ -54,26 +61,64 @@ export default {
   },
 
   computed: {
-    ...mapState([ 'gameStarted' ]),
-    ...mapGetters([ 'isMultiplayer' ])
+    ...mapState([
+      'gameStatus',
+      'gameStarted',
+      'statusMessageClass',
+      'gameStatusMessage'
+    ]),
+    ...mapGetters([
+      'isMultiplayer',
+      'gameStatusMessage'
+    ]),
+    ...mapState('board', [
+      'moves',
+      'winner'
+    ])
+  },
+
+  watch: {
+    winner () {
+      if (!isEmpty(this.winner)) {
+        this.prepareToNextGame()
+      }
+    }
   },
 
   mounted () {
-    this.togglePlayerOnStrike()
+    this.$bus.$on('strike', _ => this.checkGameState())
   },
 
   methods: {
     restartGame () {
       resetGlobalState()
+      this.$bus.$emit('restart-game')
     },
 
-    togglePlayerOnStrike () {
-      this.$bus.$on('strike', _ => this.$store.commit('TOGGLE_PLAYER'))
+    checkGameState () {
+      if (this.moves === 9) {
+        this.$store.commit('SET_GAME_STATUS', 'draw')
+      }
+
+      if (!isEmpty(this.winner)) {
+        this.$store.commit('SET_GAME_STATUS', 'win')
+      }
+
+      if (this.gameStatus === 'turn') {
+        this.$store.commit('TOGGLE_PLAYER')
+      }
     },
 
     setGameOption (optionSelected) {
       this.$store.commit('SET_GAME_MODE', optionSelected)
       this.$store.commit('SET_GAME_STATE', true)
+    },
+
+    prepareToNextGame () {
+      setTimeout(() => {
+        this.$store.commit('SET_GAME_STATUS', 'turn')
+        this.$store.commit('board/RESET_STATE')
+      }, 1200)
     }
   }
 }
@@ -90,6 +135,8 @@ body {
   background-color: #FDFFFC;
   color: #143F59;
   font-family: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   user-select: none;
   height: 100vh;
   display: flex;

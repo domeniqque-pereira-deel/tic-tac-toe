@@ -1,31 +1,61 @@
 <template>
-  <td :class="cellClass" @click="strike">{{ value }}</td>
+  <td :class="[{'is-selected': isSelected}, frozenClass]" @click="strike">{{ value }}</td>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { isEmpty } from '@/utils'
 
 export default {
   props: ['index', 'value'],
+
+  data () {
+    return { isSelected: false }
+  },
+
   computed: {
     ...mapState(['activePlayer']),
-    ...mapState('board', ['freeze']),
+    ...mapState('board', ['freeze', 'winner']),
 
-    cellClass () {
-      return (this.freeze && this.value !== '') ? 'frozen' : ''
+    frozenClass () {
+      return !this.canStrike() ? 'frozen' : ''
     }
   },
+
+  watch: {
+    winner () {
+      if (!isEmpty(this.winner)) {
+        this.isSelected = this.winner.condition.includes(parseInt(this.index))
+      } else {
+        this.isSelected = false
+      }
+    }
+  },
+
+  mounted () {
+    this.$bus.$on('restart-game', _ => this.resetData())
+  },
+
   methods: {
     strike () {
-      if (this.freeze && this.value !== '') return
+      if (!this.canStrike()) return
 
       const data = {
         cellIndex: parseInt(this.index),
         player: this.activePlayer
       }
 
-      this.$store.commit('board/STRIKE', data)
-      this.$bus.$emit('strike', data)
+      this.$store
+        .dispatch('board/strikeCell', data)
+        .then(() => this.$bus.$emit('strike', data))
+    },
+
+    canStrike () {
+      return !this.freeze && isEmpty(this.value) && isEmpty(this.winner)
+    },
+
+    resetData () {
+      Object.assign(this.$data, this.$options.data())
     }
   }
 }

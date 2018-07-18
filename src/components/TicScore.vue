@@ -27,8 +27,8 @@
 </template>
 
 <script>
-// import { levels, levelRequirement } from '@/game/level'
 import { mapGetters, mapState } from 'vuex'
+import { isEmpty } from '@/utils'
 
 export default {
   data () {
@@ -39,15 +39,24 @@ export default {
   computed: {
     ...mapGetters(['isMultiplayer']),
     ...mapState(['activePlayer']),
+    ...mapState('board', ['winner']),
     ...mapState('score', [
       'score',
       'playerPointsClass'
     ])
   },
 
+  watch: {
+    winner () {
+      if (!isEmpty(this.winner)) {
+        this.incrementPlayerScore(this.winner.player)
+      }
+    }
+  },
+
   methods: {
-    updatePlayerScore (player) {
-      // this.score[player]++
+    incrementPlayerScore (player) {
+      this.$store.commit('score/INCREMENT_PLAYER_SCORE', player)
     }
   }
 }
