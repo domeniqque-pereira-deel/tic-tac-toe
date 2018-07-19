@@ -1,5 +1,6 @@
 import { checkForWin } from '@/game/board'
-import { clone } from '@/utils'
+import { clone, isEmpty, keysWhereValue } from '@/utils'
+import Robot from '@/game/robot'
 
 const state = {
   freeze: false,
@@ -20,6 +21,12 @@ const state = {
 }
 
 const initialState = clone(state)
+
+const getters = {
+  boardIsEmpty ({ cells }) {
+    return keysWhereValue('', cells).length === 9
+  }
+}
 
 const mutations = {
   STRIKE (state, {cellIndex, player}) {
@@ -60,6 +67,35 @@ const actions = {
         condition
       })
     }
+  },
+
+  checkStatus ({state}) {
+    if (state.moves === 9) {
+      return 'draw'
+    }
+
+    if (!isEmpty(state.winner)) {
+      return 'win'
+    }
+
+    return 'turn'
+  },
+
+  async robotMove ({state, commit, rootState, dispatch}) {
+    const board = clone(state.cells)
+    const player = rootState.robotPlayer
+
+    const cellIndex = await Robot.move({
+      me: player,
+      board
+    })
+
+    await dispatch('strikeCell', {
+      cellIndex,
+      player
+    })
+
+    return cellIndex
   }
 }
 
@@ -67,5 +103,6 @@ export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

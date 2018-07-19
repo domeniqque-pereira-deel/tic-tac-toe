@@ -45,13 +45,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { resetGlobalState } from '@/store'
 import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
-import { isEmpty, clone } from '@/utils'
-import { delays } from '@/game'
+import { isEmpty } from '@/utils'
 
 export default {
   name: 'app',
@@ -73,6 +72,9 @@ export default {
       'gameStatusMessage',
       'statusMessageClass'
     ]),
+    ...mapGetters('board', [
+      'boardIsEmpty'
+    ]),
     ...mapState('board', [
       'moves',
       'winner',
@@ -85,63 +87,24 @@ export default {
       if (!isEmpty(this.winner)) {
         this.prepareToNextGame()
       }
+    },
+    moves () {
+      if (!this.boardIsEmpty) {
+        this.checkGameState()
+      }
     }
   },
 
-  mounted () {
-    this.$bus.$on('strike', _ => this.checkGameState())
-  },
-
   methods: {
+    ...mapActions([
+      'checkGameState',
+      'prepareToNextGame',
+      'setGameOption'
+    ]),
+
     restartGame () {
       resetGlobalState()
       this.$bus.$emit('restart-game')
-    },
-
-    async checkGameState () {
-      if (this.moves === 9) {
-        this.$store.commit('SET_GAME_STATUS', 'draw')
-      }
-
-      if (!isEmpty(this.winner)) {
-        this.$store.commit('SET_GAME_STATUS', 'win')
-      }
-
-      if (this.gameStatus === 'win' || this.gameStatus === 'draw') {
-        this.prepareToNextGame()
-      }
-
-      if (this.gameStatus === 'turn') {
-        this.callNextPlayer()
-      }
-    },
-
-    callNextPlayer () {
-      this.$store.commit('TOGGLE_PLAYER')
-
-      // Call robot
-      if (!this.isMultiplayer && (this.activePlayer === this.robotPlayer)) {
-        this.robotMove()
-      }
-    },
-
-    async robotMove () {
-      const board = clone(this.cells)
-      await this.$store.dispatch('robotMove', board)
-
-      this.checkGameState()
-    },
-
-    setGameOption (optionSelected) {
-      this.$store.commit('SET_GAME_MODE', optionSelected)
-      this.$store.commit('SET_GAME_STATE', true)
-    },
-
-    prepareToNextGame () {
-      setTimeout(() => {
-        this.$store.dispatch('prepareToNextGame')
-        this.$store.commit('board/RESET_STATE')
-      }, delays.nextGame)
     }
   }
 }
