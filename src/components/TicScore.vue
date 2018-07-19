@@ -14,14 +14,22 @@
           :class="{'is-current-player': activePlayer === 'X'}">
             <img class="player-img" src="~/../assets/athlete-2.svg" alt="">
             <span class="player">X</span>
-            <span class="points" :class="playerPointsClass">{{ score.X }}</span>
+            <span class="points" :class="playerPointsClass">
+              <IOdometer
+                class="iOdometer"
+                :value="score['X']"/>
+            </span>
         </div>
 
         <div class="score-item" :class="{'is-current-player': activePlayer === 'O' }">
             <img class="player-img" src="~/../assets/man.svg" v-if="isMultiplayer" alt="">
             <img class="player-img" src="~/../assets/robot.svg" v-else alt="">
             <span class="player">O</span>
-            <span class="points">{{ score.O }}</span>
+            <span class="points">
+              <IOdometer
+                class="iOdometer"
+                :value="score['O']"/>
+            </span>
         </div>
     </div>
 </template>
@@ -29,13 +37,11 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { isEmpty } from '@/utils'
+import IOdometer from 'vue-odometer'
+import 'odometer/themes/odometer-theme-default.css'
 
 export default {
-  data () {
-    return {
-      gameLevel: 1
-    }
-  },
+  components: { IOdometer },
   computed: {
     ...mapGetters(['isMultiplayer']),
     ...mapState(['activePlayer']),

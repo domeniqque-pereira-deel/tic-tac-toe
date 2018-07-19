@@ -36,18 +36,22 @@ const mutations = {
 
   RESET_STATE (state) {
     Object.assign(state, clone(initialState))
+  },
+
+  FREEZE (state, freeze) {
+    state.freeze = freeze
   }
 }
 
 const actions = {
-  strikeCell ({ state, commit, dispatch }, {cellIndex, player}) {
+  async strikeCell ({ state, commit, dispatch }, {cellIndex, player}) {
     commit('STRIKE', {cellIndex, player})
     commit('INCREMENT_MOVEMENTS')
 
-    dispatch('checkGameWinner')
+    await dispatch('checkGameWinner')
   },
 
-  checkGameWinner ({ state, commit }) {
+  async checkGameWinner ({ state, commit }) {
     const {win, winner, condition} = checkForWin(state.cells)
 
     if (win) {

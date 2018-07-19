@@ -50,7 +50,8 @@ import { resetGlobalState } from '@/store'
 import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
-import { isEmpty } from '@/utils'
+import { isEmpty, clone } from '@/utils'
+import { delays } from '@/game'
 
 export default {
   name: 'app',
@@ -64,16 +65,18 @@ export default {
     ...mapState([
       'gameStatus',
       'gameStarted',
-      'statusMessageClass',
-      'gameStatusMessage'
+      'activePlayer',
+      'robotPlayer'
     ]),
     ...mapGetters([
       'isMultiplayer',
-      'gameStatusMessage'
+      'gameStatusMessage',
+      'statusMessageClass'
     ]),
     ...mapState('board', [
       'moves',
-      'winner'
+      'winner',
+      'cells'
     ])
   },
 
@@ -95,7 +98,7 @@ export default {
       this.$bus.$emit('restart-game')
     },
 
-    checkGameState () {
+    async checkGameState () {
       if (this.moves === 9) {
         this.$store.commit('SET_GAME_STATUS', 'draw')
       }
@@ -104,9 +107,29 @@ export default {
         this.$store.commit('SET_GAME_STATUS', 'win')
       }
 
-      if (this.gameStatus === 'turn') {
-        this.$store.commit('TOGGLE_PLAYER')
+      if (this.gameStatus === 'win' || this.gameStatus === 'draw') {
+        this.prepareToNextGame()
       }
+
+      if (this.gameStatus === 'turn') {
+        this.callNextPlayer()
+      }
+    },
+
+    callNextPlayer () {
+      this.$store.commit('TOGGLE_PLAYER')
+
+      // Call robot
+      if (!this.isMultiplayer && (this.activePlayer === this.robotPlayer)) {
+        this.robotMove()
+      }
+    },
+
+    async robotMove () {
+      const board = clone(this.cells)
+      await this.$store.dispatch('robotMove', board)
+
+      this.checkGameState()
     },
 
     setGameOption (optionSelected) {
@@ -116,9 +139,9 @@ export default {
 
     prepareToNextGame () {
       setTimeout(() => {
-        this.$store.commit('SET_GAME_STATUS', 'turn')
+        this.$store.dispatch('prepareToNextGame')
         this.$store.commit('board/RESET_STATE')
-      }, 1200)
+      }, delays.nextGame)
     }
   }
 }
@@ -131,14 +154,20 @@ export default {
   padding: 0;
 }
 
+@font-face {
+  font-family: 'Indie Flower';
+  font-style: normal;
+  font-weight: 400;
+  src: local('IndieFlower'), url(./assets/fonts/IndieFlower.woff2) format('woff2');
+}
+
 body {
-  background-color: #FDFFFC;
+  background-color: rgba(0,0,0,.02);
   color: #143F59;
   font-family: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
-  height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -168,6 +197,7 @@ body {
 @media screen and (max-width: 450px) {
   .card {
     width: 100%;
+    height: 100%;
   }
   .title {
     font-size: 2.5rem;
@@ -186,6 +216,9 @@ body {
 }
 
 @media screen and (min-width: 541px) {
+  body {
+    height: 100vh;
+  }
   .card {
     width: 500px;
   }
@@ -227,7 +260,6 @@ body {
   position: relative;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   padding: 10px 0;
-  margin-top: 10px;
 }
 
 .footer a {

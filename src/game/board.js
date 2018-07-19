@@ -9,31 +9,6 @@ export const winConditions = [
   [3, 5, 7]
 ]
 
-export const getRandomIndexOf = list => Math.floor(Math.random() * list.length)
-
-export const randomItem = list => list[getRandomIndexOf(list)]
-
-export const randomRotation = previousRotation => {
-  if (previousRotation < -90) {
-    return previousRotation + 90
-  }
-
-  if (previousRotation > 90) {
-    return previousRotation - 90
-  }
-
-  return previousRotation + randomItem([-90, 90])
-}
-
-/**
-  Returns a list with the indexes when the value is the same as desired
-*/
-export function keysCellsWhereValue (value, cells) {
-  return Object.keys(cells)
-    .reduce((acc, key) =>
-      cells[key] === value ? acc.concat([parseInt(key)]) : acc, [])
-}
-
 /**
  Check if the moves meets some win condition
 */
