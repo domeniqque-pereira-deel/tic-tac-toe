@@ -48,23 +48,6 @@ export default {
   margin-top: 70px;
 }
 
-.status-message {
-  font-size: 2rem;
-  text-align: center;
-}
-
-.status-message-default {
-  color: #2EC4B6;
-}
-
-.status-message-win {
-  color: #FF9F1C;
-}
-
-.status-message-draw {
-  color: #E71D36;
-}
-
 .board-background {
   display: flex;
   justify-content: center;

@@ -7,6 +7,8 @@
     </header>
 
     <main>
+      <TicLevel v-show="!isMultiplayer && gameStarted"/>
+
       <TicSelectGameOption
         @game-mode-selected="setGameOption($event)"
         v-show="!gameStarted"/>
@@ -50,6 +52,7 @@ import { resetGlobalState } from '@/store'
 import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
+import TicLevel from '@/components/TicLevel.vue'
 import { isEmpty } from '@/utils'
 
 export default {
@@ -57,7 +60,8 @@ export default {
   components: {
     TicSelectGameOption,
     TicBoard,
-    TicScore
+    TicScore,
+    TicLevel
   },
 
   computed: {
@@ -111,6 +115,11 @@ export default {
 </script>
 
 <style>
+:root {
+  --font-primary: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
+  --font-secondary: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
 *, :after, :before {
   box-sizing: border-box;
   margin: 0;
@@ -127,7 +136,7 @@ export default {
 body {
   background-color: rgba(0,0,0,.02);
   color: #143F59;
-  font-family: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: var(--font-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
@@ -160,7 +169,7 @@ body {
 @media screen and (max-width: 450px) {
   .card {
     width: 100%;
-    height: 100%;
+    height: 100vh;
   }
   .title {
     font-size: 2.5rem;
@@ -173,7 +182,7 @@ body {
     padding: 10px 0;
     margin-left: 0;
     margin-right: 0;
-    border-radius: 15px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,.4);
   }
 }
@@ -187,12 +196,31 @@ body {
   }
 }
 
+.status-message {
+  margin-top: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+  font-family: var(--font-secondary);
+}
+
+.status-message-default {
+  color: #2EC4B6;
+}
+
+.status-message-win {
+  color: red;
+}
+
+.status-message-draw {
+  color: #E71D36;
+}
+
 .btn {
   border: none;
   box-shadow: 1px 1px 2px rgba(0,0,0,.4);
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Indie Flower', cursive;
+  font-family: var(--font-secondary);
   font-weight: 600;
   font-size: 14px;
   padding: 10px 20px;
@@ -221,7 +249,7 @@ body {
   justify-content: center;
   font-size: 0.8rem;
   position: relative;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: var(--font-secondary);
   padding: 10px 0;
 }
 
