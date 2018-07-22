@@ -8,7 +8,7 @@
     <div v-for="({title, id}, index) in levels"
       :key="index"
       class="level"
-      :class="{'active': currentLevel.id >= id}">
+      :class="{'active': currentLevel.id === id}">
       <h3>{{ title }}</h3>
     </div>
   </div>
@@ -55,7 +55,10 @@ export default {
       const target = totalSpace - spaceToGo
       const width = Math.max(Math.min(target, 100), 0)
 
-      return `--progress-width: ${width - 2}%`
+      const isVisible = this.points && this.points < this.pointsToWin
+      const opacity = isVisible ? 1 : 0
+
+      return `--progress-width: ${width}%; --ball-opacity: ${opacity}`
     }
   },
 
@@ -77,17 +80,17 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   margin: 10px 0;
-  --progress-width: -20px;
+  --progress-width: 0px;
   --progress-line-color: #2EC4B6;
   --progress-ball-color: #1fada0;
   --progress-bottom: 5px;
+  --ball-opacity: 0;
 }
 
 .progress {
   position: absolute;
   bottom: var(--progress-bottom);
   height: 6px;
-  transition: all 0.5s ease-out;
 }
 
 .progress-bar {
@@ -99,15 +102,18 @@ export default {
   left: 0;
   width: var(--progress-width);
   background-color: var(--progress-line-color);
+  transition: width 1s;
 }
 
 .progress-ball {
-  left: var(--progress-width);
+  left: calc(var(--progress-width) - 6px);
   width: 12px;
   height: 12px;
   bottom: calc(var(--progress-bottom) - 3px);
   border-radius: 50%;
   background-color: var(--progress-ball-color);
+  opacity: var(--ball-opacity);
+  transition: left 1s, opacity 0.3s;
 }
 
 .score-missing {
