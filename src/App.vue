@@ -13,10 +13,10 @@
         @game-mode-selected="setGameOption($event)"
         v-show="!gameStarted"/>
 
-      <p class="status-message"
-        :class="statusMessageClass"
+      <p class="message"
+        :class="messageClass"
         v-show="!isMultiplayer && gameStarted">
-        {{ gameStatusMessage }}
+        {{ gameMessage }}
       </p>
 
       <TicScore ref="score" v-show="gameStarted"/>
@@ -30,7 +30,7 @@
       </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" v-show="!gameStarted">
       <span>
         By <a href="http://github.com/Domeniqque">Dylluar</a>
       </span>
@@ -64,6 +64,10 @@ export default {
     TicLevel
   },
 
+  data () {
+    return { message: '' }
+  },
+
   computed: {
     ...mapState([
       'gameStatus',
@@ -83,7 +87,17 @@ export default {
       'moves',
       'winner',
       'cells'
-    ])
+    ]),
+
+    gameMessage () {
+      return this.message || this.gameStatusMessage
+    },
+
+    messageClass () {
+      return isEmpty(this.message)
+        ? this.statusMessageClass
+        : 'message-default'
+    }
   },
 
   watch: {
@@ -150,6 +164,7 @@ body {
   position: relative;
   background-color: #fff;
   z-index: 1;
+  overflow: hidden;
 }
 
 .title {
@@ -196,23 +211,23 @@ body {
   }
 }
 
-.status-message {
-  margin-top: 10px;
+.message {
+  padding: 5px 0;
   font-size: 1.5rem;
   text-align: center;
   font-family: var(--font-secondary);
 }
 
-.status-message-default {
+.message-default {
   color: #2EC4B6;
 }
 
-.status-message-win {
+.message-win {
   color: red;
 }
 
-.status-message-draw {
-  color: #E71D36;
+.message-draw {
+  color: #F19953; /*#E71D36;*/
 }
 
 .btn {
@@ -234,12 +249,11 @@ body {
 .btn-restart {
   background-color: #1C4678;
   color: #fff;
-  margin-top: 15px;
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0 }
-  100% { opacity: 1 }
+  from { opacity: 0 }
+  to { opacity: 1 }
 }
 
 .footer {

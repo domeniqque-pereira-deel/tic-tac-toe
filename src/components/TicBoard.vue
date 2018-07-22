@@ -55,6 +55,8 @@ export default {
   width: 100%;
   height: 350px;
   animation: fadeIn 0.5s ease-in-out;
+  position: relative;
+  z-index: 800;
 }
 
 .board-background-blue {

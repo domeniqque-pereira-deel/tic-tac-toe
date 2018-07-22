@@ -1,35 +1,25 @@
 <template>
     <div class="scoreboard">
-        <!-- <div class="score-missing" v-show="!isMultiplayer && scoreMissing > 0">
-          <span>Missing</span> <span class="signal">+</span>{{ scoreMissing }} <span>{{ sulfixMessage }}</span>
-        </div> -->
-
-        <!-- <div class="game-countdown"
-          v-show="useCountdownTimer"
-          :class="{ 'pulse-countdown': timer === 0 }">
-          Time <span>{{ timer.toString().padStart(2,'0') }}</span>
-        </div> -->
-
         <div class="score-item" id="box-player-x"
-          :class="{'is-current-player': activePlayer === 'X'}">
+          :class="{'is-current-player': activePlayer === 'X'}" :style="scoreItemStyle">
             <img class="player-img" src="~/../assets/athlete-2.svg" alt="">
-            <span class="player">X</span>
-            <span class="points" :class="playerPointsClass">
+            <p class="player">X</p>
+            <p class="points" v-if="isMultiplayer">
               <IOdometer
                 class="iOdometer"
                 :value="score['X']"/>
-            </span>
+            </p>
         </div>
 
-        <div class="score-item" :class="{'is-current-player': activePlayer === 'O' }">
+        <div class="score-item" :class="{'is-current-player': activePlayer === 'O' }" :style="scoreItemStyle">
             <img class="player-img" src="~/../assets/man.svg" v-if="isMultiplayer" alt="">
             <img class="player-img" src="~/../assets/robot.svg" v-else alt="">
-            <span class="player">O</span>
-            <span class="points">
+            <p class="player">O</p>
+            <p class="points" v-if="isMultiplayer">
               <IOdometer
                 class="iOdometer"
                 :value="score['O']"/>
-            </span>
+            </p>
         </div>
     </div>
 </template>
@@ -49,7 +39,11 @@ export default {
     ...mapState('score', [
       'score',
       'playerPointsClass'
-    ])
+    ]),
+    scoreItemStyle () {
+      const colums = this.isMultiplayer ? 3 : 2
+      return `--score-columns: ${colums};`
+    }
   },
 
   watch: {
@@ -60,9 +54,17 @@ export default {
     }
   },
 
+  mounted () {
+    this.$bus.$on('restart-game', () => this.resetState())
+  },
+
   methods: {
     incrementPlayerScore (player) {
       this.$store.commit('score/INCREMENT_PLAYER_SCORE', player)
+      this.$bus.$emit('score-updated', { player })
+    },
+    resetState () {
+      this.$store.commit('score/RESET_STATE')
     }
   }
 }
@@ -75,38 +77,7 @@ export default {
   flex-flow: row wrap;
   justify-content: center;
   position: relative;
-}
-
-.score-missing {
-  color: #F85A6A;
-  background-color: #fff;
-  border-top: 1px solid #E4E4E4;
-  border-bottom: 1px solid #E4E4E4;
-  border-right: 2px solid #F85A6A;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  padding: 2px 10px;
-  position: absolute;
-  left: 0;
-  bottom: 11px;
-  z-index: 9000;
-}
-
-.score-missing.expanded span.signal {
-  display: none;
-}
-
-.score-missing:not(.expanded) span:not(.signal) {
-  display: none;
-  animation: fadeIn 1s;
-}
-
-.score-missing:hover span.signal {
-  display: none;
-}
-
-.score-missing:hover span:not(.signal) {
-  display: inline;
+  --score-columns: 3;
 }
 
 .game-countdown {
@@ -146,28 +117,26 @@ export default {
   border: 1px solid #E4E4E4;
   border-bottom: 5px solid #E4E4E4;
   border-radius: 5px;
-  position: relative;
   font-size: 1.5rem;
   font-weight: 900;
   margin: 4px;
-  padding-left: 15px;
-  width: 120px;
   transition: border-bottom .3s ease-in-out;
   height: 40px;
+  display: grid;
+  grid-template-columns: repeat(var(--score-columns), 1fr);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+  overflow: hidden;
 }
 
 .player {
-  margin-left: 30px;
+  border-left: 1px solid #E4E4E4;
+  padding: 0 10px;
 }
 
 .player-img {
-  width: 30px;
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  padding-right: 5px;
-  margin-right: 10px;
-  border-right: 1px solid #E4E4E4;
+  width: 40px;
+  padding: 10px;
 }
 
 .is-current-player {
@@ -177,10 +146,7 @@ export default {
 .points {
   color: #404040;
   font-weight: 200;
-  font-size: 1.2rem;
-  position: absolute;
-  right: 25px;
-  top: 5px;
+  font-size: 1.4rem;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 

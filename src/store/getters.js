@@ -12,11 +12,13 @@ export default {
 
   statusMessageClass: ({ gameStatus }) => {
     if (gameStatus === 'win') {
-      return 'status-message-win'
+      return 'message-win'
     }
 
     return (gameStatus === 'draw')
-      ? 'status-message-draw'
-      : 'status-message-default'
-  }
+      ? 'message-draw'
+      : 'message-default'
+  },
+
+  player: state => state.robotPlayer === 'O' ? 'X' : 'O'
 }

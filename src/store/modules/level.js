@@ -2,31 +2,54 @@
 const state = {
   levels: [
     {
-      level: 1,
+      id: 1,
       title: 'Stormtrooper',
-      minPoints: 0
+      requiredPoints: 0
     },
     {
-      level: 2,
+      id: 2,
       title: 'Padawan',
-      minPoints: 5
+      requiredPoints: 5
     },
     {
-      level: 3,
+      id: 3,
       title: 'Jedi',
-      minPoints: 20
+      requiredPoints: 15
     },
     {
-      level: 4,
+      id: 4,
       title: 'Jedi Lord',
-      minPoints: 30
+      requiredPoints: 25
     }
   ],
+  pointsToWin: 30
+}
 
-  currentLevel: 1
+const getters = {
+  getCurrentLevel: ({levels}) => (points) =>
+    levels.reduce((acc, level) => level.requiredPoints >= points ? level : acc, {}),
+
+  getRequiredPoints: ({levels}, getters) => (points) => {
+    const currentLevel = getters.getCurrentLevel(points)
+    const { requiredPoints } = levels.find(({ level }) => level === currentLevel.id)
+    return requiredPoints
+  },
+
+  checkPointsMissing: (state, getters) => (currentPoints) => {
+    const requiredPoints = getters.getRequiredPoints(currentPoints)
+
+    return (requiredPoints >= currentPoints)
+      ? (requiredPoints - currentPoints)
+      : 0
+  },
+
+  getMissingToNextLevel (state, { currentLevel }) {
+
+  }
 }
 
 export default {
   namespaced: true,
-  state
+  state,
+  getters
 }
