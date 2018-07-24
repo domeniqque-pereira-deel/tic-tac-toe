@@ -70,12 +70,12 @@ const actions = {
   },
 
   checkStatus ({state}) {
-    if (state.moves === 9) {
-      return 'draw'
-    }
-
     if (!isEmpty(state.winner)) {
       return 'win'
+    }
+
+    if (state.moves === 9) {
+      return 'draw'
     }
 
     return 'turn'

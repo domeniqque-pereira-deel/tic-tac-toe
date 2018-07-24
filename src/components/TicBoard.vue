@@ -1,6 +1,6 @@
 <template>
   <div class="board-background board-background-blue">
-    <table id="board">
+    <table id="board" :style="tableAnimation">
       <tr>
         <TicCell :value="cells[1]" index="1"/>
         <TicCell :value="cells[2]" index="2"/>
@@ -22,13 +22,20 @@
 
 <script>
 import TicCell from '@/components/TicCell'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: { TicCell },
 
   computed: {
-    ...mapState('board', ['cells'])
+    ...mapState('board', ['cells']),
+    ...mapGetters('score', ['currentLevel']),
+
+    tableAnimation () {
+      const duration = this.currentLevel.durationTableAnimation
+
+      return `--duration: ${duration}ms`
+    }
   }
 }
 </script>
@@ -69,8 +76,9 @@ table {
   box-shadow: -2px 4px 10px rgba(0,0,0,.2);
   border-radius: 15px;
   animation: fadeIn 0.2s ease-in-out;
-  transition: transform 0.5s ease-in;
-  animation: rotate var(--duration) ease alternate infinite;
+  /*transition: transform 0.5s ease-in;*/
+  transform: rotate(0deg);
+  animation: fadeIn 0.2s ease-in-out, rotate var(--duration) ease-in-out alternate infinite;
 }
 /* Defining borders */
 td:nth-child(2n) {
@@ -100,27 +108,27 @@ table tr:first-child td:last-child {
 }
 
 @keyframes rotate {
-  0%, 10% {
+  0%, 9% {
     transform: rotate(0deg);
   }
 
-  20%, 30% {
+  18%, 27% {
     transform: rotate(-90deg);
   }
 
-  40%, 50% {
+  36%, 45% {
     transform: rotate(-180deg);
   }
 
-  60%, 70% {
+  54%, 63% {
     transform: rotate(-90deg);
   }
 
-  80%, 90% {
+  72%, 81% {
     transform: rotate(0deg);
   }
 
-  100% {
+  90%, 100% {
     transform: rotate(90deg);
   }
 }

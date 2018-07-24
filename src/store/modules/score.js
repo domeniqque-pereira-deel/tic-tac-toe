@@ -9,36 +9,45 @@ const state = {
     {
       id: 1,
       title: 'Stormtrooper',
-      requiredPoints: 0
+      requiredPoints: 0,
+      durationTableAnimation: 0
     },
     {
       id: 2,
       title: 'Padawan',
-      requiredPoints: 5
+      requiredPoints: 5,
+      durationTableAnimation: 8500
     },
     {
       id: 3,
       title: 'Jedi',
-      requiredPoints: 15
+      requiredPoints: 15,
+      durationTableAnimation: 6500
     },
     {
       id: 4,
       title: 'Jedi Lord',
-      requiredPoints: 25
+      requiredPoints: 25,
+      durationTableAnimation: 5000
+    },
+    {
+      id: 5,
+      title: 'Win',
+      requiredPoints: 30,
+      durationTableAnimation: 0
     }
-  ],
-  pointsToWin: 30
+  ]
 }
 
 const initialState = clone(state)
 
 const mutations = {
   INCREMENT_PLAYER_SCORE (state, player) {
-    state.score[player] += 1
+    state.score[player]++
   },
 
   DECREMENT_PLAYER_SCORE (state, player) {
-    state.score[player] += 1
+    state.score[player]--
   },
 
   RESET_STATE (state) {
@@ -47,6 +56,7 @@ const mutations = {
 }
 
 const getters = {
+  pointsToWin: ({levels}) => levels[Object.keys(levels).length - 1].requiredPoints,
   points: (state) => {
     const scorePlayer = state.score['X']
     const scoreRobot = state.score['O']
@@ -63,12 +73,16 @@ const getters = {
 
   totalLevels: state => state.levels.length,
 
-  targetPoints: (state, {currentLevel}) =>
+  targetPoints: (state, {currentLevel, pointsToWin}) =>
     state.levels.reduce((acc, level) =>
       (level.id === currentLevel.id + 1)
         ? level.requiredPoints
         : acc,
-    state.pointsToWin)
+    pointsToWin),
+
+  pointsMissing (state, { points, targetPoints }) {
+    return targetPoints - points
+  }
 }
 
 export default {

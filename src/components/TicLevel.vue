@@ -3,12 +3,14 @@
     <div class="progress progress-bar"></div>
     <div class="progress progress-line"></div>
     <div class="progress progress-ball"></div>
-    <div class="score-missing">{{ pointsMissing }}</div>
+    <div class="points-missing">
+      <p>{{ missing }}</p>
+    </div>
 
     <div v-for="({title, id}, index) in levels"
       :key="index"
       class="level"
-      :class="{'active': currentLevel.id === id}">
+      :class="{'active': currentLevel.id === id, 'win-level': id === lastLevelId}">
       <h3>{{ title }}</h3>
     </div>
   </div>
@@ -16,29 +18,30 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { delays } from '@/game'
 
 export default {
   data () {
-    return {
-      // progressStyle: '',
-      pointsMissing: ''
-    }
+    return { showMissingInfo: true }
   },
   computed: {
-    ...mapState('score', [
-      'levels',
-      'pointsToWin'
-    ]),
+    ...mapState('score', ['levels']),
     ...mapGetters('score', [
       'currentLevel',
       'points',
       'targetPoints',
-      'totalLevels'
+      'totalLevels',
+      'pointsMissing',
+      'pointsToWin'
     ]),
     ...mapState('board', [
       'moves',
       'winner'
     ]),
+
+    lastLevelId () {
+      return this.levels[Object.keys(this.levels).length - 1].id
+    },
 
     progressStyle () {
       const currentLevel = this.currentLevel.id
@@ -55,19 +58,40 @@ export default {
       const target = totalSpace - spaceToGo
       const width = Math.max(Math.min(target, 100), 0)
 
+      /* Ball style */
       const isVisible = this.points && this.points < this.pointsToWin
       const opacity = isVisible ? 1 : 0
+      const progressMissing = isVisible ? 'calc(var(--progress-width) - 15px)' : '1px'
 
-      return `--progress-width: ${width}%; --ball-opacity: ${opacity}`
+      return `
+        --progress-width: ${width}%;
+        --missing-progress: ${progressMissing};
+        --opacity: ${opacity};`
+    },
+
+    missing () {
+      const missing = this.pointsMissing
+      const info = this.points === 0 || this.showMissingInfo
+        ? 'to next level' : ''
+
+      return missing > 0 ? `+${missing} ${info}` : ''
     }
   },
 
-  mounted () {
-    // this.$bus.$on('score-updated', () =>
-    //   this.calcProgressWidth())
-    this.$bus.$on('restart-game', () => {
-      Object.assign(this.$data, this.$options.data())
-    })
+  watch: {
+    points () {
+      if (this.showMissingInfo) this.hideMissingInfo()
+    },
+    targetPoints () {
+      this.showMissingInfo = true
+      this.hideMissingInfo()
+    }
+  },
+
+  methods: {
+    hideMissingInfo () {
+      setTimeout(() => { this.showMissingInfo = false }, delays.missingInfo)
+    }
   }
 }
 </script>
@@ -78,13 +102,14 @@ export default {
   width: 100%;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1.2fr 0.8fr;
   margin: 10px 0;
-  --progress-width: 0px;
+  --progress-width: 1px;
   --progress-line-color: #2EC4B6;
   --progress-ball-color: #1fada0;
   --progress-bottom: 5px;
-  --ball-opacity: 0;
+  --missing-progress: 1px;
+  --opacity: 0;
 }
 
 .progress {
@@ -103,6 +128,7 @@ export default {
   width: var(--progress-width);
   background-color: var(--progress-line-color);
   transition: width 1s;
+  opacity: var(--opacity);
 }
 
 .progress-ball {
@@ -112,19 +138,26 @@ export default {
   bottom: calc(var(--progress-bottom) - 3px);
   border-radius: 50%;
   background-color: var(--progress-ball-color);
-  opacity: var(--ball-opacity);
   transition: left 1s, opacity 0.3s;
+  opacity: var(--opacity);
 }
 
-.score-missing {
+.points-missing {
   color: #F85A6A;
   position: absolute;
-  bottom: calc(var(--progress-bottom) - 25px);
-  left: calc(var(--progress-width) - 9px);
+  bottom: calc(var(--progress-bottom) - 45px);
+  left: calc(var(--missing-progress) + 3px);
   z-index: 9000;
   font-size: 1em;
   font-family: var(--font-secondary);
   font-weight: 600;
+  transition: all 1s, opacity 0.3s;
+  height: 40px;
+}
+
+.points-missing span {
+  display: inline-block;
+  transition: opacity 0.3s;
 }
 
 .level {
@@ -145,5 +178,12 @@ export default {
   .level {
     font-size: 0.6em;
   }
+}
+
+.win-level h3 {
+  background-color: var(--progress-line-color);
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px rgba(0,0,0,.4);
 }
 </style>

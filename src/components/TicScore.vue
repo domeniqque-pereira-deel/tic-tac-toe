@@ -149,19 +149,4 @@ export default {
   font-size: 1.4rem;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
-
-@media screen and (max-width: 360px) {
-  .score-item {
-    width: 70px;
-  }
-
-  .points {
-    right: 10px;
-  }
-
-  .player {
-    display: none;
-  }
-}
-
 </style>
