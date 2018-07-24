@@ -53,7 +53,8 @@ import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
 import TicLevel from '@/components/TicLevel.vue'
-import { isEmpty } from '@/utils'
+import Robot from '@/game/robot'
+import { isEmpty, clone } from '@/utils'
 
 export default {
   name: 'app',
@@ -83,6 +84,9 @@ export default {
     ...mapGetters('board', [
       'boardIsEmpty'
     ]),
+    ...mapGetters('score', [
+      'currentLevel'
+    ]),
     ...mapState('board', [
       'moves',
       'winner',
@@ -106,9 +110,16 @@ export default {
         this.prepareToNextGame()
       }
     },
-    moves () {
-      if (!this.boardIsEmpty) {
-        this.checkGameState()
+    async moves () {
+      // Waiting x to play
+      if (this.boardIsEmpty) return
+
+      const status = await this.checkGameState()
+
+      if (status === 'turn' &&
+        !this.isMultiplayer &&
+        (this.activePlayer === this.robotPlayer)) {
+        await this.robotMove()
       }
     }
   },
@@ -123,6 +134,24 @@ export default {
     restartGame () {
       resetGlobalState()
       this.$bus.$emit('restart-game')
+    },
+
+    async robotMove () {
+      const board = clone(this.cells)
+      const player = this.robotPlayer
+
+      const cellIndex = await Robot.move({
+        level: this.currentLevel,
+        me: player,
+        board
+      })
+
+      await this.$store.dispatch('board/strikeCell', {
+        cellIndex,
+        player
+      })
+
+      return cellIndex
     }
   }
 }

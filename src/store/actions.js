@@ -24,20 +24,8 @@ export default {
       await dispatch('prepareToNextGame')
     }
 
-    if (status === 'turn') {
-      dispatch('callNextPlayer')
-    }
-  },
+    if (status === 'turn') commit('TOGGLE_PLAYER')
 
-  async callNextPlayer ({state, commit, getters, dispatch}) {
-    commit('TOGGLE_PLAYER')
-
-    const {isMultiplayer, activePlayer, robotPlayer} = {...state, ...getters}
-
-    // Call robot
-    if (!isMultiplayer && (activePlayer === robotPlayer)) {
-      await dispatch('board/robotMove')
-      return true
-    }
+    return status
   }
 }
