@@ -28,13 +28,13 @@ export default {
   components: { TicCell },
 
   computed: {
-    ...mapState('board', ['cells']),
+    ...mapState('board', ['moves', 'cells']),
     ...mapGetters('score', ['currentLevel']),
 
     tableAnimation () {
       const duration = this.currentLevel.durationTableAnimation
 
-      return `--duration: ${duration}ms`
+      return `animation: rotate ${duration}ms ease-in-out alternate infinite;`
     }
   }
 }
@@ -76,9 +76,8 @@ table {
   box-shadow: -2px 4px 10px rgba(0,0,0,.2);
   border-radius: 15px;
   animation: fadeIn 0.2s ease-in-out;
-  /*transition: transform 0.5s ease-in;*/
   transform: rotate(0deg);
-  animation: fadeIn 0.2s ease-in-out, rotate var(--duration) ease-in-out alternate infinite;
+  animation: fadeIn 0.2s ease-in-out;
 }
 /* Defining borders */
 td:nth-child(2n) {

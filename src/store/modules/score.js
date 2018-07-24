@@ -10,31 +10,36 @@ const state = {
       id: 1,
       title: 'Stormtrooper',
       requiredPoints: 0,
-      durationTableAnimation: 0
+      durationTableAnimation: 0,
+      countdown: 0
     },
     {
       id: 2,
       title: 'Padawan',
       requiredPoints: 5,
-      durationTableAnimation: 8500
+      durationTableAnimation: 8500,
+      countdown: 0
     },
     {
       id: 3,
       title: 'Jedi',
       requiredPoints: 15,
-      durationTableAnimation: 6500
+      durationTableAnimation: 6500,
+      countdown: 10
     },
     {
       id: 4,
       title: 'Jedi Lord',
       requiredPoints: 25,
-      durationTableAnimation: 5000
+      durationTableAnimation: 5000,
+      countdown: 8
     },
     {
       id: 5,
       title: 'Win',
       requiredPoints: 30,
-      durationTableAnimation: 0
+      durationTableAnimation: 0,
+      countdown: 0
     }
   ]
 }

@@ -13,6 +13,10 @@
       :class="{'active': currentLevel.id === id, 'win-level': id === lastLevelId}">
       <h3>{{ title }}</h3>
     </div>
+
+    <div class="countdown" v-show="currentLevel.countdown">
+        Time <span>{{ countdown.toString().padStart(2,'0') }}</span>
+    </div>
   </div>
 </template>
 
@@ -22,7 +26,10 @@ import { delays } from '@/game'
 
 export default {
   data () {
-    return { showMissingInfo: true }
+    return {
+      showMissingInfo: true,
+      countdown: 0
+    }
   },
   computed: {
     ...mapState('score', ['levels']),
@@ -37,6 +44,9 @@ export default {
     ...mapState('board', [
       'moves',
       'winner'
+    ]),
+    ...mapState([
+      'gameStatus'
     ]),
 
     lastLevelId () {
@@ -85,12 +95,57 @@ export default {
     targetPoints () {
       this.showMissingInfo = true
       this.hideMissingInfo()
+    },
+
+    moves () {
+      if (this.moves === 1) {
+        this.startCountdown()
+      }
     }
+  },
+
+  mounted () {
+    this.$bus.$on('restart-game', () => {
+      Object.assign(this.$data, this.$options.data())
+    })
+
+    this.countdown = this.currentLevel.countdown
   },
 
   methods: {
     hideMissingInfo () {
       setTimeout(() => { this.showMissingInfo = false }, delays.missingInfo)
+    },
+
+    async startCountdown (player = 'X') {
+      const decrease = await this.shouldScoreDecrease()
+
+      if (decrease) {
+        this.$store.commit('score/DECREMENT_PLAYER_SCORE', player)
+        this.$store.dispatch('prepareToNextGame')
+      }
+
+      setTimeout(() => { this.countdown = this.currentLevel.countdown }, 1000)
+    },
+
+    async shouldScoreDecrease () {
+      return new Promise(resolve => {
+        const intervalId = setInterval(() => {
+          let mustContinue = this.gameStatus === 'turn'
+
+          if (!mustContinue || this.points === 0 || (this.currentLevel.countdown === 0)) {
+            clearInterval(intervalId)
+            resolve(false)
+          }
+
+          if (mustContinue && this.countdown > 0) {
+            this.countdown--
+          } else {
+            clearInterval(intervalId)
+            resolve(true)
+          }
+        }, 1000)
+      })
     }
   }
 }
@@ -102,7 +157,7 @@ export default {
   width: 100%;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1.2fr 0.8fr;
+  grid-template-columns: 1fr 1fr 1fr 1.4fr 0.6fr;
   margin: 10px 0;
   --progress-width: 1px;
   --progress-line-color: #2EC4B6;
@@ -174,16 +229,35 @@ export default {
   color: hsla(203, 63%, 21%, 1);
 }
 
-@media screen and (max-width: 361px) {
-  .level {
-    font-size: 0.6em;
-  }
-}
-
 .win-level h3 {
   background-color: var(--progress-line-color);
   color: #fff;
   border-radius: 5px;
   box-shadow: 1px 1px 1px rgba(0,0,0,.4);
+}
+
+@media screen and (max-width: 361px) {
+  .level { font-size: 0.6em; }
+
+  .win-level h3 { width: 30px; }
+}
+
+.countdown {
+  background-color: #fff;
+  border-top: 1px solid #E4E4E4;
+  border-bottom: 1px solid #E4E4E4;
+  border-left: 2px solid #F85A6A;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 2px 10px;
+  position: absolute;
+  right: 0;
+  bottom: -88px;
+  z-index: 9000;
+}
+
+.countdown span {
+  color: #F85A6A;
+  font-family: var(--font-secondary);
 }
 </style>

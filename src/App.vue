@@ -54,6 +54,7 @@ import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
 import TicLevel from '@/components/TicLevel.vue'
 import Robot from '@/game/robot'
+import swal from 'sweetalert2'
 import { isEmpty, clone } from '@/utils'
 
 export default {
@@ -85,7 +86,9 @@ export default {
       'boardIsEmpty'
     ]),
     ...mapGetters('score', [
-      'currentLevel'
+      'currentLevel',
+      'pointsToWin',
+      'points'
     ]),
     ...mapState('board', [
       'moves',
@@ -119,7 +122,28 @@ export default {
       if (status === 'turn' &&
         !this.isMultiplayer &&
         (this.activePlayer === this.robotPlayer)) {
-        await this.robotMove()
+        this.robotMove()
+      }
+    },
+
+    points () {
+      if (this.points === this.pointsToWin) {
+        setTimeout(() => {
+          swal({
+            title: 'You Win!',
+            text: 'Woow! Very Good! :D',
+            padding: '3em',
+            width: 300,
+            backdrop: `
+              rgb(28, 70, 120, .4)
+              url("/static/img/nyan-cat.gif")
+              left bottom
+              no-repeat
+            `
+          }).then(() => {
+            this.restartGame()
+          })
+        }, 500)
       }
     }
   },
