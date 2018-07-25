@@ -23,6 +23,10 @@
 
       <TicBoard v-show="gameStarted"/>
 
+      <TicInstructions
+        v-show="gameStarted && !isMultiplayer"
+        showButton="true"/>
+
       <div class="card-footer" v-show="gameStarted" @click="restartGame">
         <button class="btn btn-restart">
           Restart
@@ -53,6 +57,7 @@ import TicSelectGameOption from '@/components/TicSelectGameOption.vue'
 import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
 import TicLevel from '@/components/TicLevel.vue'
+import TicInstructions from '@/components/TicInstructions.vue'
 import Robot from '@/game/robot'
 import swal from 'sweetalert2'
 import { isEmpty, clone } from '@/utils'
@@ -63,7 +68,8 @@ export default {
     TicSelectGameOption,
     TicBoard,
     TicScore,
-    TicLevel
+    TicLevel,
+    TicInstructions
   },
 
   data () {

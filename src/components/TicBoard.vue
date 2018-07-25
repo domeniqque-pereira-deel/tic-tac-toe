@@ -40,10 +40,7 @@ export default {
 }
 </script>
 
-<style>
-:root {
-  --duration: 0s;
-}
+<style scoped>
 .level-message {
   font-size: 2.5rem;
   text-align: center;

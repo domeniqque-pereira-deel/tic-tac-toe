@@ -202,7 +202,7 @@ export default {
   position: absolute;
   bottom: calc(var(--progress-bottom) - 45px);
   left: calc(var(--missing-progress) + 3px);
-  z-index: 9000;
+  z-index: 1500;
   font-size: 1em;
   font-family: var(--font-secondary);
   font-weight: 600;
