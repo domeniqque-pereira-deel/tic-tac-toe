@@ -206,7 +206,7 @@ export default {
   font-family: 'Indie Flower';
   font-style: normal;
   font-weight: 400;
-  src: local('IndieFlower'), url(./assets/fonts/IndieFlower.woff2) format('woff2');
+  src: url(./assets/fonts/IndieFlower.woff2) format('woff2');
 }
 
 :root {
