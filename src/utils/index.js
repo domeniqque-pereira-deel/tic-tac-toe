@@ -7,6 +7,13 @@ export const getRandomIndexOf = list => Math.floor(Math.random() * list.length)
 
 export const randomItem = list => list[getRandomIndexOf(list)]
 
+export const getStorage = key => window.localStorage.getItem(key)
+
+export const setStorage = (key, value) => {
+  window.localStorage.setItem(key, value)
+  return value
+}
+
 /**
   Returns a list with the indexes when the value is the same as desired
 */

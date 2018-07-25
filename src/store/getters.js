@@ -3,11 +3,19 @@ export default {
   isMultiplayer: state => state.gameMode === 'multiplayer',
 
   gameStatusMessage: ({gameStatus, activePlayer}, _, rootState) => {
-    if (gameStatus === 'draw') return 'Draw!'
+    if (gameStatus === 'draw') {
+      return {
+        key: 'game.messages.draw'
+      }
+    }
 
     const player = rootState.board.winner.player || activePlayer
 
-    return `${player}'s ${gameStatus}!`
+    return {
+      key: `game.messages.${gameStatus}`,
+      player,
+      gameStatus
+    }
   },
 
   statusMessageClass: ({ gameStatus }) => {

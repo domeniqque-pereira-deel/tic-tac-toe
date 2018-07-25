@@ -23,21 +23,21 @@ const state = {
     {
       id: 3,
       title: 'Jedi',
-      requiredPoints: 15,
+      requiredPoints: 10,
       durationTableAnimation: 6500,
       countdown: 10
     },
     {
       id: 4,
       title: 'Jedi Lord',
-      requiredPoints: 25,
+      requiredPoints: 15,
       durationTableAnimation: 5000,
       countdown: 8
     },
     {
       id: 5,
       title: 'Win',
-      requiredPoints: 30,
+      requiredPoints: 25,
       durationTableAnimation: 0,
       countdown: 0
     }

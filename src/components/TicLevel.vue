@@ -15,7 +15,7 @@
     </div>
 
     <div class="countdown" v-show="currentLevel.countdown">
-        Time <span>{{ countdown.toString().padStart(2,'0') }}</span>
+        {{ $t('game.actions.label_coutdown')}} <span>{{ countdown.toString().padStart(2,'0') }}</span>
     </div>
   </div>
 </template>
@@ -81,10 +81,13 @@ export default {
 
     missing () {
       const missing = this.pointsMissing
-      const info = this.points === 0 || this.showMissingInfo
-        ? 'to next level' : ''
+      if (missing === 0) return ''
 
-      return missing > 0 ? `+${missing} ${info}` : ''
+      const info = this.points === 0 || this.showMissingInfo
+        ? this.$i18n.t('game.actions.label_next_level')
+        : ''
+
+      return `+${missing} ${info}`
     }
   },
 

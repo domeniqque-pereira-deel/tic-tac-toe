@@ -1,14 +1,14 @@
 <template>
   <div class="select-game-box">
-    <h4 class="select-game-title">Select a game option</h4>
+    <h4 class="select-game-title">{{ $t('game.selectOption') }}</h4>
     <div class="select-game-options">
       <div class="select-game-option" @click="sendGameOption('multiplayer')">
         <img src="~/../assets/networking.svg" alt="Play with another human">
-        <p>Multiplayer</p>
+        <p>{{ $t('game.options.multiplayer') }}</p>
       </div>
       <div class="select-game-option" @click="sendGameOption('single-player')">
         <img src="~/../assets/artificial-intelligence.svg" alt="Play against a robot">
-        <p>Robot</p>
+        <p>{{ $t('game.options.robot') }}</p>
       </div>
     </div>
   </div>

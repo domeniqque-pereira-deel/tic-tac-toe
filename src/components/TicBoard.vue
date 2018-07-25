@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .level-message {
   font-size: 2.5rem;
   text-align: center;
@@ -74,7 +74,6 @@ table {
   border-radius: 15px;
   animation: fadeIn 0.2s ease-in-out;
   transform: rotate(0deg);
-  animation: fadeIn 0.2s ease-in-out;
 }
 /* Defining borders */
 td:nth-child(2n) {

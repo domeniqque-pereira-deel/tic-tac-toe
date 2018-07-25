@@ -7,15 +7,15 @@
       </div>
 
       <div class="container">
-        <h1>Instructions</h1>
+        <h1>{{ $t('instructions.title') }}</h1>
 
-        <p>Make more points than the robot and win the game</p>
-        <p><b>How to make points</b>? Simple, do not let the robot win from you. When this happens you lose points</p>
-        <p>Enjoy that in the early stages he is silly, is still learning to play</p>
-        <p>But in the end, beware of time. It is your enemy and will take your points</p>
-        <p><b>Draw</b> or <b>win</b> before time runs out</p>
+        <p v-html="$t('instructions.p1')"></p>
+        <p v-html="$t('instructions.p2')"></p>
+        <p v-html="$t('instructions.p3')"></p>
+        <p v-html="$t('instructions.p4')"></p>
+        <p v-html="$t('instructions.p5')"></p>
 
-        <button class="btn btn-next" @click.prevent="show = false">Continue</button>
+        <button class="btn btn-next" @click.prevent="show = false">{{ $t('game.actions.btn_continue') }}</button>
       </div>
     </div>
 
@@ -38,7 +38,7 @@ export default {
 <style scoped>
 .full-background {
   position: absolute;
-  background-color: rgba(255,255,255,0.95);
+  background-color: rgba(255,255,255,0.96);
   z-index: 2000;
   width: 100%;
   height: 100%;
