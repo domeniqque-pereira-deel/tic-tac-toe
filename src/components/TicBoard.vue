@@ -74,6 +74,7 @@ table {
   border-radius: 15px;
   animation: fadeIn 0.2s ease-in-out;
   transform: rotate(0deg);
+  will-change: transform;
 }
 /* Defining borders */
 td:nth-child(2n) {

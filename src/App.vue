@@ -206,7 +206,7 @@ export default {
   font-family: 'Indie Flower';
   font-style: normal;
   font-weight: 400;
-  src: url('/static/fonts/IndieFlower.woff2') format('woff2');
+  src: url('https://domeniqque.github.io/tic-tac-toe/static/fonts/IndieFlower.woff2') format('woff2');
 }
 
 :root {

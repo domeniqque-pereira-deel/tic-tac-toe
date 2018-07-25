@@ -2,7 +2,7 @@
     <div class="scoreboard">
         <div class="score-item" id="box-player-x"
           :class="{'is-current-player': activePlayer === 'X'}" :style="scoreItemStyle">
-            <img class="player-img" src="~/../assets/athlete-2.svg" alt="">
+            <img class="player-img" src="~@/assets/athlete-2.svg" alt="">
             <p class="player">X</p>
             <p class="points" v-if="isMultiplayer">
               <IOdometer
@@ -12,8 +12,8 @@
         </div>
 
         <div class="score-item" :class="{'is-current-player': activePlayer === 'O' }" :style="scoreItemStyle">
-            <img class="player-img" src="~/../assets/man.svg" v-if="isMultiplayer" alt="">
-            <img class="player-img" src="~/../assets/robot.svg" v-else alt="">
+            <img class="player-img" src="~@/assets/man.svg" v-if="isMultiplayer" alt="">
+            <img class="player-img" src="~@/assets/robot.svg" v-else alt="">
             <p class="player">O</p>
             <p class="points" v-if="isMultiplayer">
               <IOdometer
