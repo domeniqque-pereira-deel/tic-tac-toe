@@ -47,7 +47,7 @@ export default {
 .select-game-option {
   cursor: pointer;
   width: 250px;
-  height: 180px;
+  height: 160px;
   text-align: center;
   display: flex;
   flex-direction: column;

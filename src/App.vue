@@ -206,7 +206,7 @@ export default {
   font-family: 'Indie Flower';
   font-style: normal;
   font-weight: 400;
-  src: url(/static/fonts/IndieFlower.woff2) format('woff2');
+  src: url('/static/fonts/IndieFlower.woff2') format('woff2');
 }
 
 :root {
@@ -279,7 +279,7 @@ header {
   }
 }
 
-@media screen and (min-width: 541px) {
+@media screen and (min-width: 540px) {
   body {
     height: 100vh;
   }

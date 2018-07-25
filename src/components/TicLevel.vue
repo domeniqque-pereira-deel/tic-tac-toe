@@ -239,7 +239,7 @@ export default {
   box-shadow: 1px 1px 1px rgba(0,0,0,.4);
 }
 
-@media screen and (max-width: 361px) {
+@media screen and (max-width: 540px) {
   .level { font-size: 0.6em; }
 
   .win-level h3 { width: 30px; }
