@@ -202,6 +202,13 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: 'Indie Flower';
+  font-style: normal;
+  font-weight: 400;
+  src: local('IndieFlower'), url(./assets/fonts/IndieFlower.woff2) format('woff2');
+}
+
 :root {
   --font-primary: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
   --font-secondary: 'Avenir', Helvetica, Arial, sans-serif;
@@ -211,13 +218,6 @@ export default {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-@font-face {
-  font-family: 'Indie Flower';
-  font-style: normal;
-  font-weight: 400;
-  src: local('IndieFlower'), url(./assets/fonts/IndieFlower.woff2) format('woff2');
 }
 
 body {
