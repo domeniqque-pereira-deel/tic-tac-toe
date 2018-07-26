@@ -12,7 +12,7 @@
         </div>
 
         <div class="score-item" :class="{'is-current-player': activePlayer === 'O' }" :style="scoreItemStyle">
-            <img class="player-img" src="~@/assets/man.png" v-show="!isMultiplayer" alt="">
+            <img class="player-img" src="~@/assets/man.png" v-show="isMultiplayer" alt="">
             <img class="player-img" src="~@/assets/robot.svg" v-show="!isMultiplayer" alt="">
             <p class="player">O</p>
             <p class="points" v-if="isMultiplayer">
