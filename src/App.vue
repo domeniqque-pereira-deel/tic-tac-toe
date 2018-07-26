@@ -202,16 +202,16 @@ export default {
 </script>
 
 <style>
+:root {
+  --font-primary: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
+  --font-secondary: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
 @font-face {
   font-family: 'Indie Flower';
   font-style: normal;
   font-weight: 400;
-  src: url('https://domeniqque.github.io/tic-tac-toe/static/fonts/IndieFlower.woff2') format('woff2');
-}
-
-:root {
-  --font-primary: 'Indie Flower', cursive, 'Avenir', Helvetica, Arial, sans-serif;
-  --font-secondary: 'Avenir', Helvetica, Arial, sans-serif;
+  src: url('~@/assets/fonts/IndieFlower.woff2') format('woff2');
 }
 
 *, :after, :before {
