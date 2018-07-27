@@ -48,11 +48,8 @@
     <footer v-show="!gameStarted">
       <TicSelectLocale v-show="!gameStarted"/>
       <div class="footer">
-        <span>
-          By <a href="http://github.com/Domeniqque">Dylluar</a>
-        </span>
-        <span>
-          Icons by <a href="https://www.flaticon.com/authors/eucalyp" target="_blank" title="Eucalyp">Eucalyp</a>
+        <span title="From www.flaticon.com is licensed by CC 3.0 BY">
+          Icons by <a href="https://www.flaticon.com/authors/eucalyp" target="_blank" title="Eucalyp">Eucalyp</a> and <a href="http://www.freepik.com" title="Freepik">Freepik</a>
         </span>
       </div>
     </footer>
@@ -347,11 +344,11 @@ header {
   color: #494949;
 }
 
-.footer span:first-child:after {
+/*.footer span:first-child:after {
   content: '|';
   padding-right: 5px;
   padding-left: 5px;
-}
+}*/
 
 .footer a:hover {
   color: rgb(0, 0, 238);
