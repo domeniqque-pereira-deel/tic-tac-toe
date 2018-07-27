@@ -2,6 +2,8 @@
   <div id="app" class="card">
     <a v-show="!gameStarted"
       href="https://github.com/Domeniqque/tic-tac-toe"
+      target="_blank"
+      rel="noopener"
       class="github-corner"
       aria-label="View source on Github">
        <svg width="60" height="60" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
@@ -49,7 +51,7 @@
       <TicSelectLocale v-show="!gameStarted"/>
       <div class="footer">
         <span title="From www.flaticon.com is licensed by CC 3.0 BY">
-          Icons by <a href="https://www.flaticon.com/authors/eucalyp" target="_blank" title="Eucalyp">Eucalyp</a> and <a href="http://www.freepik.com" title="Freepik">Freepik</a>
+          Icons by <a href="https://www.flaticon.com/authors/eucalyp" target="_blank" rel="noopener" title="Eucalyp">Eucalyp</a> and <a href="http://www.freepik.com" target="_blank" rel="noopener" title="Freepik">Freepik</a>
         </span>
       </div>
     </footer>
@@ -208,7 +210,8 @@ export default {
   font-family: 'Indie Flower';
   font-style: normal;
   font-weight: 400;
-  src: url('~@/assets/fonts/IndieFlower.woff2') format('woff2');
+  font-display: auto;
+  src: local('IndieFlower'), url('~@/assets/fonts/IndieFlower.woff2') format('woff2');
 }
 
 *, :after, :before {

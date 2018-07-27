@@ -1,20 +1,20 @@
 {
-  "name": "tic-tac-toe",
-  "short_name": "TicTacToe",
-  "icons": [
+  "name" : "tic-tac-toe",
+  "short_name" : "TicTacToe",
+  "start_url" : "https://domeniqque.github.io/tic-tac-toe/index.html",
+  "display" : "standalone",
+  "background_color" : "#000000",
+  "theme_color" : "#1f4776",
+  "lang" : "",
+  "orientation" : "portrait",
+  "icons" : [
     {
-      "src": "/tic-tac-toe/static/img/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "https://domeniqque.github.io/tic-tac-toe/static/img/icons/android-chrome-192x192.png",
+      "sizes": "192x192"
     },
     {
-      "src": "/tic-tac-toe/static/img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "https://domeniqque.github.io/tic-tac-toe/static/img/icons/android-chrome-512x512.png",
+      "sizes": "512x512"
     }
-  ],
-  "start_url": "/tic-tac-toe/index.html",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#1f4776"
+  ]
 }
