@@ -15,7 +15,7 @@ export default {
         portuguese: 'Português'
       },
       credit: 'Créditos',
-      by: 'Feito por'
+      by: 'By'
     },
     messages: {
       draw: 'Empate!',
