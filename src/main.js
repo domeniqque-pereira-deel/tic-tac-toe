@@ -13,7 +13,7 @@ Vue.use(VueI18n)
 Vue.use(EventBus)
 
 const i18n = new VueI18n({
-  locale: 'pt', // set locale
+  locale: 'en', // set locale
   messages // set locale messages
 })
 

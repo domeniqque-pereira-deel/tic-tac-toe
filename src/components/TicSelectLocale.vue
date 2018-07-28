@@ -29,7 +29,7 @@ export default {
   methods: {
     setLocale (locale = null) {
       if (locale === null) {
-        locale = getStorage('game_locale') || setStorage('game_locale', 'pt')
+        locale = getStorage('game_locale') || setStorage('game_locale', 'en')
       } else {
         setStorage('game_locale', locale)
       }

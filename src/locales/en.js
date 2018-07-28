@@ -9,7 +9,6 @@ export default {
     actions: {
       btn_restart: 'Restart',
       btn_continue: 'Continue',
-      label_next_level: 'points to next level',
       label_coutdown: 'Time',
       locales: {
         english: 'English',

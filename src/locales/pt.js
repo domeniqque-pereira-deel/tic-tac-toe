@@ -9,7 +9,6 @@ export default {
     actions: {
       btn_restart: 'Reiniciar',
       btn_continue: 'Continuar',
-      label_next_level: 'pontos para a próxima fase',
       label_coutdown: 'Tempo',
       locales: {
         english: 'Inglês',

@@ -22,14 +22,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { delays } from '@/game'
 
 export default {
   data () {
-    return {
-      showMissingInfo: true,
-      countdown: 0
-    }
+    return { countdown: 0 }
   },
   computed: {
     ...mapState('score', ['levels']),
@@ -83,23 +79,11 @@ export default {
       const missing = this.pointsMissing
       if (missing === 0) return ''
 
-      const info = this.points === 0 || this.showMissingInfo
-        ? this.$i18n.t('game.actions.label_next_level')
-        : ''
-
-      return `+${missing} ${info}`
+      return `+${missing}`
     }
   },
 
   watch: {
-    points () {
-      if (this.showMissingInfo) this.hideMissingInfo()
-    },
-    targetPoints () {
-      this.showMissingInfo = true
-      this.hideMissingInfo()
-    },
-
     moves () {
       if (this.moves === 1) {
         this.startCountdown()
@@ -116,10 +100,6 @@ export default {
   },
 
   methods: {
-    hideMissingInfo () {
-      setTimeout(() => { this.showMissingInfo = false }, delays.missingInfo)
-    },
-
     async startCountdown (player = 'X') {
       const decrease = await this.shouldScoreDecrease()
 
