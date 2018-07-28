@@ -13,7 +13,9 @@ export default {
       locales: {
         english: 'Inglês',
         portuguese: 'Português'
-      }
+      },
+      credit: 'Créditos',
+      by: 'Feito por'
     },
     messages: {
       draw: 'Empate!',

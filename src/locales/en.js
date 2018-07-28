@@ -13,7 +13,9 @@ export default {
       locales: {
         english: 'English',
         portuguese: 'Portuguese'
-      }
+      },
+      credit: 'Credit',
+      by: 'By'
     },
     messages: {
       draw: 'Draw!',

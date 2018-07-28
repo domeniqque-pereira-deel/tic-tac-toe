@@ -20,7 +20,8 @@ const store = new Vuex.Store({
     gameMode: 'default',
     gameStarted: false,
     // can turn, win or draw
-    gameStatus: 'turn'
+    gameStatus: 'turn',
+    showEndAnimation: false
   },
 
   getters,

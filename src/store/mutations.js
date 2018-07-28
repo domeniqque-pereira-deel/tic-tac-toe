@@ -18,5 +18,9 @@ export default {
 
   SET_ACTIVE_PLAYER (state, player) {
     state.activePlayer = player
+  },
+
+  START_END_ANIMATION (state, value) {
+    state.showEndAnimation = value
   }
 }

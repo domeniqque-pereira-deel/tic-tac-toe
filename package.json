@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "odometer": "^0.4.8",
-    "sweetalert2": "^7.25.6",
     "vue": "^2.5.2",
     "vue-i18n": "^8.0.0",
     "vue-odometer": "^1.0.1",

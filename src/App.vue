@@ -36,25 +36,70 @@
 
       <TicBoard v-show="gameStarted"/>
 
-      <TicInstructions
-        v-show="gameStarted && !isMultiplayer"
-        showButton="true"/>
+      <TicModal
+        :show="gameStarted && !isMultiplayer && showInstructions"
+        @close="showInstructions = false">
+        <h1>{{ $t('instructions.title') }}</h1>
 
-      <div class="card-footer" v-show="gameStarted" @click="restartGame">
-        <button class="btn btn-restart">
+        <p v-html="$t('instructions.p1')"></p>
+        <p v-html="$t('instructions.p2')"></p>
+        <p v-html="$t('instructions.p3')"></p>
+        <p v-html="$t('instructions.p4')"></p>
+        <p v-html="$t('instructions.p5')"></p>
+      </TicModal>
+
+      <div class="card-footer" v-show="gameStarted">
+        <button class="btn btn-restart" @click.prevent="restartGame">
           {{ $t('game.actions.btn_restart') }}
         </button>
+
+        <button class="btn btn-show"
+          @click.prevent="showInstructions = true">?</button>
       </div>
     </main>
 
     <footer v-show="!gameStarted">
       <TicSelectLocale v-show="!gameStarted"/>
+
+      <TicModal
+        :show="showCredits"
+        @close="showCredits = false">
+        <h1>Credits</h1>
+        <h3>Icons from <a href="www.flaticon.com">flaticon.com</a> made by</h3>
+        <ul title="From www.flaticon.com is licensed by CC 3.0 BY">
+          <li>
+            <a href="https://www.flaticon.com/authors/eucalyp" target="_blank" rel="noopener" title="Eucalyp">Eucalyp</a>
+          </li>
+          <li>
+            <a href="http://www.freepik.com" target="_blank" rel="noopener" title="Freepik">Freepik</a>
+          </li>
+        </ul>
+
+        <h3>Gifs <small>on <a href="giphy.com">Gyphy.com</a></small></h3>
+        <ul>
+          <li v-for="{ author, name } in animations()">
+            <a :href="author" target="_blank" rel="noopener">{{ name }}</a>
+          </li>
+        </ul>
+      </TicModal>
+
       <div class="footer">
-        <span title="From www.flaticon.com is licensed by CC 3.0 BY">
-          Icons by <a href="https://www.flaticon.com/authors/eucalyp" target="_blank" rel="noopener" title="Eucalyp">Eucalyp</a> and <a href="http://www.freepik.com" target="_blank" rel="noopener" title="Freepik">Freepik</a>
+        <span>
+          {{ $t('game.actions.by') }}&nbsp;<a href="https://github.com/Domeniqque">Domeniqque</a>
+        </span>
+        <span>
+          <a href="#" @click.prevent="showCredits = true">{{ $t('game.actions.credit') }}</a>
         </span>
       </div>
     </footer>
+
+    <div class="end-animation" :style="endAnimationStyle" v-if="showEndAnimation">
+      <h1>{{ $t('game.messages.winner_title') }}</h1>
+      <h2>{{ $t('game.messages.winner_sub_title') }}</h2>
+      <div>
+        <button class="btn btn-restart" @click.prevent="restartGame()">{{ $t('game.actions.btn_continue') }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -66,10 +111,10 @@ import TicBoard from '@/components/TicBoard.vue'
 import TicScore from '@/components/TicScore.vue'
 import TicLevel from '@/components/TicLevel.vue'
 import TicSelectLocale from '@/components/TicSelectLocale.vue'
-import TicInstructions from '@/components/TicInstructions.vue'
+import TicModal from '@/components/TicModal.vue'
 import Robot from '@/game/robot'
-import swal from 'sweetalert2'
-import { isEmpty, clone } from '@/utils'
+import { isEmpty, clone, randomItem } from '@/utils'
+import { delays } from '@/game'
 
 export default {
   name: 'app',
@@ -78,12 +123,16 @@ export default {
     TicBoard,
     TicScore,
     TicLevel,
-    TicInstructions,
+    TicModal,
     TicSelectLocale
   },
 
   data () {
-    return { message: '' }
+    return {
+      message: '',
+      showCredits: false,
+      showInstructions: true
+    }
   },
 
   computed: {
@@ -91,7 +140,8 @@ export default {
       'gameStatus',
       'gameStarted',
       'activePlayer',
-      'robotPlayer'
+      'robotPlayer',
+      'showEndAnimation'
     ]),
     ...mapGetters([
       'isMultiplayer',
@@ -121,6 +171,15 @@ export default {
       return isEmpty(this.message)
         ? this.statusMessageClass
         : 'message-default'
+    },
+
+    endAnimationStyle () {
+      const { url, backgroundColor } = randomItem(this.animations())
+
+      return `
+        background-color: ${backgroundColor};
+        background-image: url(${url});
+      `
     }
   },
 
@@ -146,21 +205,8 @@ export default {
     points () {
       if (this.points === this.pointsToWin) {
         setTimeout(() => {
-          swal({
-            title: this.$i18n.t('game.messages.winner_title'),
-            text: this.$i18n.t('game.messages.winner_sub_title'),
-            padding: '3em',
-            width: 300,
-            backdrop: `
-              rgb(28, 70, 120, .4)
-              url("/static/img/nyan-cat.gif")
-              left bottom
-              no-repeat
-            `
-          }).then(() => {
-            this.restartGame()
-          })
-        }, 500)
+          this.$store.commit('START_END_ANIMATION', true)
+        }, delays.startEndAnimation)
       }
     }
   },
@@ -172,8 +218,45 @@ export default {
       'setGameOption'
     ]),
 
+    animations () {
+      return [
+        {
+          url: '/static/img/nyan-cat.gif',
+          backgroundColor: '#083660',
+          name: 'Nyan-cat',
+          author: 'http://gph.is/Vwznl1'
+        }, {
+          url: '/static/img/nyan-cat-breaking.gif',
+          backgroundColor: '#000000',
+          name: 'Nyan-cat breaking',
+          author: 'http://gph.is/2cRKCDh'
+        }, {
+          url: '/static/img/nyan-cat-like-a-boss.gif',
+          backgroundColor: '#0B3C73',
+          name: 'Nyan-cat like a boss',
+          author: 'https://gph.is/2cDEONL'
+        }, {
+          url: '/static/img/nyan-cat-adventure-time.gif',
+          backgroundColor: '#073164',
+          name: 'Nyan-cat and adventure time',
+          author: 'https://gph.is/28VC9KL'
+        }, {
+          url: '/static/img/nyan-cat-zombie.gif',
+          backgroundColor: '#083562',
+          name: 'Nyan-cat zombie',
+          author: 'https://gph.is/1syO5M6'
+        }, {
+          url: '/static/img/nyan-cat-running.gif',
+          backgroundColor: '#043566',
+          name: 'Nyan-cat running',
+          author: 'https://gph.is/VwApgG'
+        }
+      ]
+    },
+
     restartGame () {
       resetGlobalState()
+      Object.assign(this.$data, this.$options.data())
       this.$bus.$emit('restart-game')
     },
 
@@ -326,6 +409,27 @@ header {
 .btn-restart {
   background-color: #1C4678;
   color: #fff;
+  z-index: 0;
+}
+
+.btn-next {
+  color: #fff;
+  background-color: #143F59;
+  float: right;
+}
+
+.btn-show {
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+  padding: 0 !important;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: none;
+  font-size: 1.2em;
+  z-index: 100;
 }
 
 @keyframes fadeIn {
@@ -343,18 +447,53 @@ header {
   padding: 10px 0;
 }
 
-.footer a {
+.footer span:nth-child(1):after {
+  content: '|';
+  position: relative;
+  margin: 0 10px;
+}
+
+a {
   color: #494949;
 }
 
-/*.footer span:first-child:after {
-  content: '|';
-  padding-right: 5px;
-  padding-left: 5px;
-}*/
-
-.footer a:hover {
+a:hover {
   color: rgb(0, 0, 238);
+}
+
+.end-animation {
+  display: grid;
+  grid-template-rows: 0.5fr 5fr 1fr;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5000;
+  text-align: center;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% auto;
+}
+
+.end-animation h1, .end-animation h2 {
+  color: white;
+  padding: 10px 0;
+  text-shadow: 0 4px rgba(0,0,0,.4)
+}
+
+.end-animation h1 {
+  font-size: 3rem;
+}
+
+.end-animation h2 {
+  font-size: 2rem;
+}
+
+ul {
+  padding-left: 20px;
+  padding-bottom: 10px;
 }
 
 /*

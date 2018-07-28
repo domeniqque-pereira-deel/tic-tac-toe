@@ -1,37 +1,21 @@
 <template>
-  <div>
-    <div class="full-background" v-show="show">
-      <div id="btn-close" @click="show = false">
+  <div class="full-background" v-show="show">
+      <div id="btn-close" @click="$emit('close')">
         <span>|</span>
         <span>|</span>
       </div>
 
       <div class="container">
-        <h1>{{ $t('instructions.title') }}</h1>
+        <slot/>
 
-        <p v-html="$t('instructions.p1')"></p>
-        <p v-html="$t('instructions.p2')"></p>
-        <p v-html="$t('instructions.p3')"></p>
-        <p v-html="$t('instructions.p4')"></p>
-        <p v-html="$t('instructions.p5')"></p>
-
-        <button class="btn btn-next" @click.prevent="show = false">{{ $t('game.actions.btn_continue') }}</button>
+        <button class="btn btn-close" @click.prevent="$emit('close')">{{ $t('game.actions.btn_continue') }}</button>
       </div>
-    </div>
-
-    <button class="btn btn-show"
-      title="Instructions of game"
-      v-show="showButton"
-      @click.prevent="show = true">?</button>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['showButton'],
-  data () {
-    return { show: true }
-  }
+  props: ['showButton', 'show']
 }
 </script>
 
@@ -91,22 +75,9 @@ export default {
   margin: 15px 0;
 }
 
-.btn-show {
-  position: absolute;
-  right: 10px;
-  bottom: 20px;
-  padding: 0 !important;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #fff;
-  box-shadow: none;
-  font-size: 1.2em;
-}
-
-.btn-next {
+.btn-close {
   color: #fff;
   background-color: #143F59;
-  float: right;
 }
+
 </style>

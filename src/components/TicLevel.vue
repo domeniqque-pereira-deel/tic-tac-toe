@@ -22,6 +22,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { delays } from '@/game'
 
 export default {
   data () {
@@ -108,7 +109,7 @@ export default {
         this.$store.dispatch('prepareToNextGame')
       }
 
-      setTimeout(() => { this.countdown = this.currentLevel.countdown }, 500)
+      setTimeout(() => { this.countdown = this.currentLevel.countdown }, delays.restartCountdown)
     },
 
     async shouldScoreDecrease () {
