@@ -108,7 +108,7 @@ export default {
         this.$store.dispatch('prepareToNextGame')
       }
 
-      setTimeout(() => { this.countdown = this.currentLevel.countdown }, 1000)
+      setTimeout(() => { this.countdown = this.currentLevel.countdown }, 500)
     },
 
     async shouldScoreDecrease () {
