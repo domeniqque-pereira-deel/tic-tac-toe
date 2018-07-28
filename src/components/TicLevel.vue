@@ -235,8 +235,8 @@ export default {
   padding: 2px 10px;
   position: absolute;
   right: 0;
-  bottom: -88px;
-  z-index: 9000;
+  bottom: -55px;
+  z-index: 2000;
 }
 
 .countdown span {
