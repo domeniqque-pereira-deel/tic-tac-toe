@@ -1,6 +1,6 @@
 <template>
   <div class="full-background" v-show="show">
-      <div id="btn-close" @click="$emit('close')">
+      <div class="btn-close-top" @click="$emit('close')">
         <span>|</span>
         <span>|</span>
       </div>
@@ -30,7 +30,7 @@ export default {
   left: 0;
 }
 
-#btn-close {
+.btn-close-top {
   position: relative;
   float: right;
   font-size: 2.5em;
@@ -41,19 +41,19 @@ export default {
   z-index: 3000;
 }
 
-#btn-close span {
+.btn-close-top span {
   position: absolute;
   display: inline-block;
   top: 0;
   font-family: var(--font-secondary);
 }
 
-#btn-close span:nth-child(1) {
+.btn-close-top span:nth-child(1) {
   right: 13px;
   transform: rotate(42deg);
 }
 
-#btn-close span:nth-child(2) {
+.btn-close-top span:nth-child(2) {
   right: 10px;
   transform: rotate(-42deg);
 }

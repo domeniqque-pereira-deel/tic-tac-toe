@@ -1,12 +1,13 @@
 {
-  "name" : "tic-tac-toe",
+  "name" : "Tic-Tac-Toe",
   "short_name" : "TicTacToe",
-  "start_url" : "https://domeniqque.github.io/tic-tac-toe/index.html",
+  "start_url" : "/tic-tac-toe/index.html?utm_source=homescreen",
   "display" : "standalone",
   "background_color" : "#ffffff",
   "theme_color" : "#1f4776",
   "lang" : "en",
   "orientation" : "portrait",
+  "scope": "",
   "icons" : [
     {
       "src": "https://domeniqque.github.io/tic-tac-toe/static/img/icons/android-chrome-192x192.png",

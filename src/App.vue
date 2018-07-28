@@ -81,6 +81,13 @@
             <a :href="author" target="_blank" rel="noopener">{{ name }}</a>
           </li>
         </ul>
+
+        <h3>Nyan cat song</h3>
+        <ul>
+          <li>
+            <a href="https://archive.org/details/nyannyannyan">audionyannyannyan</a>
+          </li>
+        </ul>
       </TicModal>
 
       <div class="footer">
@@ -93,12 +100,16 @@
       </div>
     </footer>
 
-    <div class="end-animation" :style="endAnimationStyle" v-if="showEndAnimation">
+    <div class="end-animation" :style="endAnimationStyle" v-show="showEndAnimation">
       <h1>{{ $t('game.messages.winner_title') }}</h1>
       <h2>{{ $t('game.messages.winner_sub_title') }}</h2>
       <div>
-        <button class="btn btn-restart" @click.prevent="restartGame()">{{ $t('game.actions.btn_continue') }}</button>
+        <button class="btn btn-restart" @click.prevent="restartGame()">
+          {{ $t('game.actions.btn_continue') }}
+        </button>
       </div>
+
+      <audio ref="audioWin" :src="songUrl" preload="auto" loop></audio>
     </div>
   </div>
 </template>
@@ -131,7 +142,8 @@ export default {
     return {
       message: '',
       showCredits: false,
-      showInstructions: true
+      showInstructions: true,
+      songUrl: '/static/songs/NyanCat.mp3'
     }
   },
 
@@ -205,7 +217,7 @@ export default {
     points () {
       if (this.points === this.pointsToWin) {
         setTimeout(() => {
-          this.$store.commit('START_END_ANIMATION', true)
+          this.initEndAnimation()
         }, delays.startEndAnimation)
       }
     }
@@ -257,6 +269,7 @@ export default {
     restartGame () {
       resetGlobalState()
       Object.assign(this.$data, this.$options.data())
+      this.stopAnimations()
       this.$bus.$emit('restart-game')
     },
 
@@ -278,6 +291,17 @@ export default {
 
       this.$store.commit('board/FREEZE', false)
       return cellIndex
+    },
+
+    initEndAnimation () {
+      this.$store.commit('START_END_ANIMATION', true)
+      this.$refs.audioWin.play()
+    },
+
+    stopAnimations () {
+      const music = this.$refs.audioWin
+      music.pause()
+      music.currentTime = 0
     }
   }
 }
