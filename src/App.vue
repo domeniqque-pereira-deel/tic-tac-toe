@@ -124,7 +124,7 @@ import TicLevel from '@/components/TicLevel.vue'
 import TicSelectLocale from '@/components/TicSelectLocale.vue'
 import TicModal from '@/components/TicModal.vue'
 import Robot from '@/game/robot'
-import { isEmpty, clone, randomItem } from '@/utils'
+import { isEmpty, clone, randomItem, mountUri } from '@/utils'
 import { delays } from '@/game'
 
 export default {
@@ -143,7 +143,7 @@ export default {
       message: '',
       showCredits: false,
       showInstructions: true,
-      songUrl: '/static/songs/NyanCat.mp3'
+      songUrl: mountUri('static/songs/NyanCat.mp3')
     }
   },
 
@@ -190,7 +190,7 @@ export default {
 
       return `
         background-color: ${backgroundColor};
-        background-image: url(${url});
+        background-image: url(${mountUri(url)});
       `
     }
   },
@@ -233,32 +233,32 @@ export default {
     animations () {
       return [
         {
-          url: '/static/img/nyan-cat.gif',
+          url: 'static/img/nyan-cat.gif',
           backgroundColor: '#083660',
           name: 'Nyan-cat',
           author: 'http://gph.is/Vwznl1'
         }, {
-          url: '/static/img/nyan-cat-breaking.gif',
+          url: 'static/img/nyan-cat-breaking.gif',
           backgroundColor: '#000000',
           name: 'Nyan-cat breaking',
           author: 'http://gph.is/2cRKCDh'
         }, {
-          url: '/static/img/nyan-cat-like-a-boss.gif',
+          url: 'static/img/nyan-cat-like-a-boss.gif',
           backgroundColor: '#0B3C73',
           name: 'Nyan-cat like a boss',
           author: 'https://gph.is/2cDEONL'
         }, {
-          url: '/static/img/nyan-cat-adventure-time.gif',
+          url: 'static/img/nyan-cat-adventure-time.gif',
           backgroundColor: '#073164',
           name: 'Nyan-cat and adventure time',
           author: 'https://gph.is/28VC9KL'
         }, {
-          url: '/static/img/nyan-cat-zombie.gif',
+          url: 'static/img/nyan-cat-zombie.gif',
           backgroundColor: '#083562',
           name: 'Nyan-cat zombie',
           author: 'https://gph.is/1syO5M6'
         }, {
-          url: '/static/img/nyan-cat-running.gif',
+          url: 'static/img/nyan-cat-running.gif',
           backgroundColor: '#043566',
           name: 'Nyan-cat running',
           author: 'https://gph.is/VwApgG'

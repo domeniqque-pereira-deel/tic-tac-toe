@@ -1,3 +1,4 @@
+import config from './../../config'
 
 export const clone = object => JSON.parse(JSON.stringify(object))
 
@@ -12,6 +13,14 @@ export const getStorage = key => window.localStorage.getItem(key)
 export const setStorage = (key, value) => {
   window.localStorage.setItem(key, value)
   return value
+}
+
+export const mountUri = relativePath => {
+  const assetsPublicPath = process.env.NODE_ENV === 'production'
+    ? config.build.assetsPublicPath
+    : ''
+
+  return `${assetsPublicPath}/${relativePath}`
 }
 
 /**
