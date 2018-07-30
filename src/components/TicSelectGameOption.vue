@@ -3,11 +3,11 @@
     <h4 class="select-game-title">{{ $t('game.selectOption') }}</h4>
     <div class="select-game-options">
       <div class="select-game-option" @click="sendGameOption('multiplayer')">
-        <img src="~/../assets/networking.svg" alt="Play with another human">
+        <VLazyImage :src="$mountUri('static/img/networking.svg')" alt="Play with another human"/>
         <p>{{ $t('game.options.multiplayer') }}</p>
       </div>
       <div class="select-game-option" @click="sendGameOption('single-player')">
-        <img src="~/../assets/artificial-intelligence.svg" alt="Play against a robot">
+        <VLazyImage :src="$mountUri('static/img/artificial-intelligence.svg')" alt="Play against a robot"/>
         <p>{{ $t('game.options.robot') }}</p>
       </div>
     </div>
@@ -15,7 +15,10 @@
 </template>
 
 <script>
+import VLazyImage from 'v-lazy-image'
+
 export default {
+  components: { VLazyImage },
   methods: {
     sendGameOption (gameType) {
       this.$emit('game-mode-selected', gameType)

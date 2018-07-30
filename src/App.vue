@@ -109,7 +109,7 @@
         </button>
       </div>
 
-      <audio ref="audioWin" :src="songUrl" preload="auto" loop></audio>
+      <audio ref="audioWin" :src="$mountUri('static/songs/NyanCat.mp3')" preload="auto" loop></audio>
     </div>
   </div>
 </template>
@@ -124,7 +124,7 @@ import TicLevel from '@/components/TicLevel.vue'
 import TicSelectLocale from '@/components/TicSelectLocale.vue'
 import TicModal from '@/components/TicModal.vue'
 import Robot from '@/game/robot'
-import { isEmpty, clone, randomItem, mountUri } from '@/utils'
+import { isEmpty, clone, randomItem } from '@/utils'
 import { delays } from '@/game'
 
 export default {
@@ -142,8 +142,7 @@ export default {
     return {
       message: '',
       showCredits: false,
-      showInstructions: true,
-      songUrl: mountUri('static/songs/NyanCat.mp3')
+      showInstructions: true
     }
   },
 
@@ -190,7 +189,7 @@ export default {
 
       return `
         background-color: ${backgroundColor};
-        background-image: url(${mountUri(url)});
+        background-image: url(${this.$mountUri(url)});
       `
     }
   },

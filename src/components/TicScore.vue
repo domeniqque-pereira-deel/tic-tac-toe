@@ -2,7 +2,7 @@
     <div class="scoreboard">
         <div class="score-item" id="box-player-x"
           :class="{'is-current-player': activePlayer === 'X'}" :style="scoreItemStyle">
-            <img class="player-img" src="~@/assets/athlete.svg" alt="">
+            <VLazyImage class="player-img" :src="$mountUri('static/img/athlete.svg')" alt="First player icon are a athlete"/>
             <p class="player">X</p>
             <p class="points" v-if="isMultiplayer">
               <IOdometer
@@ -12,8 +12,8 @@
         </div>
 
         <div class="score-item" :class="{'is-current-player': activePlayer === 'O' }" :style="scoreItemStyle">
-            <img class="player-img" src="~@/assets/man.png" v-show="isMultiplayer" alt="">
-            <img class="player-img" src="~@/assets/robot.svg" v-show="!isMultiplayer" alt="">
+            <VLazyImage class="player-img" :src="$mountUri('static/img/man.png')" v-show="isMultiplayer"/>
+            <VLazyImage class="player-img" :src="$mountUri('static/img/robot.svg')" v-show="!isMultiplayer"/>
             <p class="player">O</p>
             <p class="points" v-if="isMultiplayer">
               <IOdometer
@@ -28,10 +28,11 @@
 import { mapGetters, mapState } from 'vuex'
 import { isEmpty } from '@/utils'
 import IOdometer from 'vue-odometer'
+import VLazyImage from 'v-lazy-image'
 import 'odometer/themes/odometer-theme-default.css'
 
 export default {
-  components: { IOdometer },
+  components: { IOdometer, VLazyImage },
   computed: {
     ...mapGetters(['isMultiplayer']),
     ...mapState(['activePlayer']),
