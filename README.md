@@ -2,6 +2,10 @@
 
 > A small hobbye project made with VueJs :heart:
 
+## Multiplayer mode
+
+![Multiplayer Mode](https://raw.githubusercontent.com/Domeniqque/tic-tac-toe/master/static/img/tic-tac-toe-multiplayer.png | width=400)
+
 ## To run
 
 ``` bash
