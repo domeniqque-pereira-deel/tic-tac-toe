@@ -4,7 +4,19 @@
 
 ## Multiplayer mode
 
-![Multiplayer Mode](https://raw.githubusercontent.com/Domeniqque/tic-tac-toe/master/static/img/tic-tac-toe-multiplayer.png | width=400)
+<img src="https://raw.githubusercontent.com/Domeniqque/tic-tac-toe/master/static/img/tic-tac-toe-multiplayer.png" width="300" />
+
+## Against a robot
+<img src="https://raw.githubusercontent.com/Domeniqque/tic-tac-toe/master/static/img/tic-tac-toe-robot.png" width="300"/>
+
+## Google Audits
+<img src="https://raw.githubusercontent.com/Domeniqque/tic-tac-toe/master/static/img/tic-tac-toe-audits.png"/>
+
+## Stack
+* VueJs
+* Async and await (promises)
+* PWA
+* WebWorkers
 
 ## To run
 
