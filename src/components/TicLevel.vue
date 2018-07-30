@@ -14,15 +14,14 @@
       <h3>{{ title }}</h3>
     </div>
 
-    <div class="countdown" v-show="currentLevel.countdown">
+    <div class="countdown" v-show="currentLevel.countdown > 0">
         {{ $t('game.actions.label_coutdown')}} <span>{{ countdown.toString().padStart(2,'0') }}</span>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { delays } from '@/game'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -85,10 +84,11 @@ export default {
   },
 
   watch: {
-    moves () {
-      if (this.moves === 1) {
-        this.startCountdown()
-      }
+    /*
+    * Check if should start countdown decrease
+    */
+    gameStatus () {
+      this.shouldStartCountdown()
     }
   },
 
@@ -96,20 +96,28 @@ export default {
     this.$bus.$on('restart-game', () => {
       Object.assign(this.$data, this.$options.data())
     })
-
-    this.countdown = this.currentLevel.countdown
   },
 
   methods: {
-    async startCountdown (player = 'X') {
+    ...mapActions(['checkGameState']),
+
+    shouldStartCountdown () {
+      const { requiredPoints, countdown } = this.currentLevel
+
+      if (this.points >= requiredPoints && countdown > 0) {
+        this.startCountdown()
+      }
+    },
+
+    async startCountdown (decreaseOfPlayer = 'X') {
+      this.countdown = this.currentLevel.countdown
       const decrease = await this.shouldScoreDecrease()
 
       if (decrease) {
-        this.$store.commit('score/DECREMENT_PLAYER_SCORE', player)
-        this.$store.dispatch('prepareToNextGame')
+        this.$store.commit('score/DECREMENT_PLAYER_SCORE', decreaseOfPlayer)
+        await this.checkGameState()
+        this.shouldStartCountdown()
       }
-
-      setTimeout(() => { this.countdown = this.currentLevel.countdown }, delays.restartCountdown)
     },
 
     async shouldScoreDecrease () {
