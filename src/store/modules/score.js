@@ -3,7 +3,7 @@ import { clone } from '@/utils'
 const state = {
   score: {
     O: 0,
-    X: 9
+    X: 0
   },
   levels: [
     {
