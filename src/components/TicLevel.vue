@@ -115,9 +115,10 @@ export default {
 
       if (decrease) {
         this.$store.commit('score/DECREMENT_PLAYER_SCORE', decreaseOfPlayer)
-        await this.checkGameState()
-        this.shouldStartCountdown()
       }
+
+      await this.checkGameState()
+      this.shouldStartCountdown()
     },
 
     async shouldScoreDecrease () {
