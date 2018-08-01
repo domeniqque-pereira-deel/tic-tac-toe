@@ -1,6 +1,9 @@
 # Tic-tac-toe (Crazy)
 
-> A small hobbye project made with VueJs :heart:
+A small hobbye project made with VueJs :heart:
+
+## See working
+<https://domeniqque.github.io/tic-tac-toe>
 
 ## Multiplayer mode
 
@@ -17,6 +20,7 @@
 * Async and await (promises)
 * PWA
 * WebWorkers
+* CSS3 (only)
 
 ## To run
 
@@ -28,10 +32,4 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
