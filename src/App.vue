@@ -195,28 +195,30 @@ export default {
   },
 
   watch: {
-    winner () {
-      if (!isEmpty(this.winner)) {
-        this.prepareToNextGame()
-      }
-    },
     async moves () {
       // Waiting x to play
       if (this.boardIsEmpty) return
 
+      this._freeze()
       const status = await this.checkGameState()
+
+      if (status === 'win') {
+        this.prepareToNextGame()
+      }
 
       if (status === 'turn' &&
         !this.isMultiplayer &&
         (this.activePlayer === this.robotPlayer)) {
         this.robotMove()
       }
+
+      this._unfreeze()
     },
 
     points () {
       if (this.points === this.pointsToWin) {
         setTimeout(() => {
-          this.initEndAnimation()
+          this.initWinAnimation()
         }, delays.startEndAnimation)
       }
     }
@@ -273,7 +275,7 @@ export default {
     },
 
     async robotMove () {
-      this.$store.commit('board/FREEZE', true)
+      this._freeze()
       const board = clone(this.cells)
       const player = this.robotPlayer
 
@@ -288,11 +290,11 @@ export default {
         player
       })
 
-      this.$store.commit('board/FREEZE', false)
+      this._unfreeze()
       return cellIndex
     },
 
-    initEndAnimation () {
+    initWinAnimation () {
       this.$store.commit('START_END_ANIMATION', true)
       this.$refs.audioWin.play()
     },
@@ -301,6 +303,14 @@ export default {
       const music = this.$refs.audioWin
       music.pause()
       music.currentTime = 0
+    },
+
+    _freeze () {
+      this.$store.commit('board/FREEZE', true)
+    },
+
+    _unfreeze () {
+      this.$store.commit('board/FREEZE', false)
     }
   }
 }
