@@ -14,7 +14,7 @@
       <h3>{{ title }}</h3>
     </div>
 
-    <TicCountdown
+    <TicCountdown v-if="false"
       :time="currentLevel.countdown"
       :start="true"
       @finalized="decrementScore"/>
