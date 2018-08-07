@@ -200,7 +200,7 @@ export default {
       if (this.boardIsEmpty) return
 
       this._freeze()
-      const status = await this.checkGameState()
+      const status = await this.checkGameState(true)
 
       if (status === 'win') {
         this.prepareToNextGame()

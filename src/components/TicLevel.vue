@@ -14,19 +14,19 @@
       <h3>{{ title }}</h3>
     </div>
 
-    <div class="countdown" v-show="currentLevel.countdown > 0">
-        {{ $t('game.actions.label_coutdown')}} <span>{{ countdown.toString().padStart(2,'0') }}</span>
-    </div>
+    <TicCountdown
+      :time="currentLevel.countdown"
+      :start="true"
+      @finalized="decrementScore"/>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import TicCountdown from '@/components/TicCountdown'
 
 export default {
-  data () {
-    return { countdown: 0 }
-  },
+  components: { TicCountdown },
   computed: {
     ...mapState('score', ['levels']),
     ...mapGetters('score', [
@@ -36,13 +36,6 @@ export default {
       'totalLevels',
       'pointsMissing',
       'pointsToWin'
-    ]),
-    ...mapState('board', [
-      'moves',
-      'winner'
-    ]),
-    ...mapState([
-      'gameStatus'
     ]),
 
     lastLevelId () {
@@ -82,63 +75,14 @@ export default {
       return `+${missing}`
     }
   },
-
-  watch: {
-    /*
-    * Check if should start countdown decrease
-    */
-    gameStatus () {
-      this.shouldStartCountdown()
-    }
-  },
-
-  mounted () {
-    this.$bus.$on('restart-game', () => {
-      Object.assign(this.$data, this.$options.data())
-    })
-  },
-
+  // mounted () {
+  //   this.$bus.$on('restart-game', () => {
+  //     Object.assign(this.$data, this.$options.data())
+  //   })
+  // },
   methods: {
-    ...mapActions(['checkGameState']),
-
-    shouldStartCountdown () {
-      const { requiredPoints, countdown } = this.currentLevel
-
-      if (this.points >= requiredPoints && countdown > 0) {
-        this.startCountdown()
-      }
-    },
-
-    async startCountdown (decreaseOfPlayer = 'X') {
-      this.countdown = this.currentLevel.countdown
-      const decrease = await this.shouldScoreDecrease()
-
-      if (decrease) {
-        this.$store.commit('score/DECREMENT_PLAYER_SCORE', decreaseOfPlayer)
-      }
-
-      await this.checkGameState()
-      this.shouldStartCountdown()
-    },
-
-    async shouldScoreDecrease () {
-      return new Promise(resolve => {
-        const intervalId = setInterval(() => {
-          let mustContinue = this.gameStatus === 'turn'
-
-          if (!mustContinue || this.points === 0 || (this.currentLevel.countdown === 0)) {
-            clearInterval(intervalId)
-            resolve(false)
-          }
-
-          if (mustContinue && this.countdown > 0) {
-            this.countdown--
-          } else {
-            clearInterval(intervalId)
-            resolve(true)
-          }
-        }, 1000)
-      })
+    decrementScore () {
+      this.$store.commit('score/DECREMENT_PLAYER_SCORE', 'X')
     }
   }
 }
@@ -233,24 +177,5 @@ export default {
   .level { font-size: 0.6em; }
 
   .win-level h3 { width: 30px; }
-}
-
-.countdown {
-  background-color: #fff;
-  border-top: 1px solid #E4E4E4;
-  border-bottom: 1px solid #E4E4E4;
-  border-left: 2px solid #F85A6A;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  padding: 2px 10px;
-  position: absolute;
-  right: 0;
-  bottom: -55px;
-  z-index: 2000;
-}
-
-.countdown span {
-  color: #F85A6A;
-  font-family: var(--font-secondary);
 }
 </style>

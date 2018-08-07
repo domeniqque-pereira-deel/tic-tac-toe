@@ -16,7 +16,7 @@ export default {
     }, delays.nextGame)
   },
 
-  async checkGameState ({state, commit, dispatch}) {
+  async checkGameState ({state, commit, dispatch}, shouldTogglePlayer) {
     const status = await dispatch('board/checkStatus')
     commit('SET_GAME_STATUS', status)
 
@@ -24,7 +24,9 @@ export default {
       await dispatch('prepareToNextGame')
     }
 
-    if (status === 'turn') commit('TOGGLE_PLAYER')
+    if (status === 'turn' && shouldTogglePlayer) {
+      commit('TOGGLE_PLAYER')
+    }
 
     return status
   }
