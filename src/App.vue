@@ -517,7 +517,6 @@ a {
   min-width: 95px;
   font-family: var(--font-secondary);
   box-shadow: 0 0 4px rgba(0,0,0,.3);
-  border-bottom: 4px solid #1C4678;
 }
 
 @keyframes fadeIn {
