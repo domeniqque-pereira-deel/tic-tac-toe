@@ -1,6 +1,7 @@
 export default {
   game: {
     title: 'Tic-Tac-Toe',
+    description: 'A crazy Tic-Tac-Toe game',
     selectOption: 'I want to play against',
     options: {
       multiplayer: 'a friend',
@@ -13,9 +14,7 @@ export default {
       locales: {
         english: 'English',
         portuguese: 'Portuguese'
-      },
-      credit: 'Credit',
-      by: 'By'
+      }
     },
     messages: {
       draw: 'Draw!',
@@ -23,7 +22,9 @@ export default {
       win: '{player}`s {gameStatus}!',
       winner_title: 'You Win!',
       winner_sub_title: 'Woow! Very Good! :D'
-    }
+    },
+    share: 'Share',
+    shared: 'Link copied!'
   },
   instructions: {
     title: 'Instructions',

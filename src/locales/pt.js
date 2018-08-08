@@ -1,6 +1,7 @@
 export default {
   game: {
     title: 'Jogo da Velha',
+    description: 'Um jogo da velha louco',
     selectOption: 'Quero jogar contra',
     options: {
       multiplayer: 'um amigo',
@@ -13,9 +14,7 @@ export default {
       locales: {
         english: 'Inglês',
         portuguese: 'Português'
-      },
-      credit: 'Créditos',
-      by: 'By'
+      }
     },
     messages: {
       draw: 'Empate!',
@@ -23,7 +22,9 @@ export default {
       win: '{player} ganhou!',
       winner_title: 'Você ganhou!',
       winner_sub_title: 'Woow! Parabéns! :D'
-    }
+    },
+    share: 'Compartilhar',
+    shared: 'Link copiado!'
   },
   instructions: {
     title: 'Instruções',

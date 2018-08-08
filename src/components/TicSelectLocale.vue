@@ -55,6 +55,7 @@ export default {
   text-align: center;
   font-size: 0.8em;
   font-family: var(--font-secondary);
+  cursor: pointer;
 }
 
 .active {

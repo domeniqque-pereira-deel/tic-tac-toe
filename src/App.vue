@@ -53,7 +53,7 @@
           {{ $t('game.actions.btn_restart') }}
         </button>
 
-        <button class="btn btn-show"
+        <button class="btn btn-circle btn-show"
           @click.prevent="showInstructions = true">?</button>
       </div>
     </main>
@@ -92,10 +92,10 @@
 
       <div class="footer">
         <span>
-          {{ $t('game.actions.by') }}&nbsp;<a href="https://github.com/Domeniqque">Domeniqque</a>
+          By&nbsp;<a href="https://github.com/Domeniqque">Domeniqque</a>
         </span>
         <span>
-          <a href="#" @click.prevent="showCredits = true">{{ $t('game.actions.credit') }}</a>
+          <a href="#" @click.prevent="showCredits = true">Credit</a>
         </span>
       </div>
     </footer>
@@ -111,6 +111,10 @@
 
       <audio ref="audioWin" :src="$mountUri('static/songs/NyanCat.mp3')" preload="auto" loop></audio>
     </div>
+
+    <a class="share" @click.prevent="share()" ref="shareButton">
+      {{ $t('game.share') }}
+    </a>
   </div>
 </template>
 
@@ -305,6 +309,36 @@ export default {
       music.currentTime = 0
     },
 
+    share () {
+      const url = 'https://domeniqque.github.io/tic-tac-toe/?utm_source=shared'
+
+      if (navigator.share) {
+        navigator.share({
+          title: this.$t('game.title'),
+          text: this.$t('game.description'),
+          url
+        })
+      } else {
+        this._copyToClipboard(url)
+
+        this.$refs.shareButton.text = this.$t('game.shared')
+
+        setTimeout(() => { this.$refs.shareButton.text = this.$t('game.share') }, 3000)
+      }
+    },
+
+    _copyToClipboard: str => {
+      const el = document.createElement('textarea')
+      el.value = str
+      el.setAttribute('readonly', '')
+      el.style.position = 'absolute'
+      el.style.left = '-9999px'
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+    },
+
     _freeze () {
       this.$store.commit('board/FREEZE', true)
     },
@@ -351,6 +385,10 @@ body {
 
 header {
   margin: 10px 0;
+}
+
+a {
+  cursor: pointer;
 }
 
 .card {
@@ -451,10 +489,7 @@ header {
   float: right;
 }
 
-.btn-show {
-  position: absolute;
-  right: 10px;
-  bottom: 20px;
+.btn-circle {
   padding: 0 !important;
   width: 40px;
   height: 40px;
@@ -463,6 +498,26 @@ header {
   box-shadow: none;
   font-size: 1.2em;
   z-index: 100;
+}
+
+.btn-show {
+  position: absolute;
+  left: 10px;
+  bottom: 20px;
+}
+
+.share {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0.8em;
+  min-width: 95px;
+  font-family: var(--font-secondary);
+  box-shadow: 0 0 4px rgba(0,0,0,.3);
+  border-bottom: 4px solid #1C4678;
 }
 
 @keyframes fadeIn {
