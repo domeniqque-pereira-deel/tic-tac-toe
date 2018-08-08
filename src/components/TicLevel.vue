@@ -14,10 +14,9 @@
       <h3>{{ title }}</h3>
     </div>
 
-    <TicCountdown v-if="false"
-      :time="currentLevel.countdown"
-      :start="true"
-      @finalized="decrementScore"/>
+    <TicCountdown v-show="currentLevel.countdown > 0"
+      @finalized="decrementScore"
+      ref="countdown"/>
   </div>
 </template>
 
@@ -37,6 +36,7 @@ export default {
       'pointsMissing',
       'pointsToWin'
     ]),
+    ...mapState(['gameStatus']),
 
     lastLevelId () {
       return this.levels[Object.keys(this.levels).length - 1].id
@@ -75,11 +75,23 @@ export default {
       return `+${missing}`
     }
   },
-  // mounted () {
-  //   this.$bus.$on('restart-game', () => {
-  //     Object.assign(this.$data, this.$options.data())
-  //   })
-  // },
+
+  watch: {
+    points () {
+      if (this.currentLevel.countdown > 0) {
+        this.$refs.countdown.start(this.currentLevel.countdown)
+      } else {
+        this.$refs.countdown.stop()
+      }
+    },
+
+    gameStatus () {
+      if (this.gameStatus === 'draw') {
+        this.$refs.countdown.start(this.currentLevel.countdown)
+      }
+    }
+  },
+
   methods: {
     decrementScore () {
       this.$store.commit('score/DECREMENT_PLAYER_SCORE', 'X')

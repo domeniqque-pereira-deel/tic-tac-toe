@@ -6,45 +6,35 @@
 
 <script>
 export default {
-  props: {
-    time: {
-      type: Number,
-      required: true
-    },
-
-    start: Boolean
-  },
-
   data () {
-    return { counter: 0, counterId: null }
-  },
-
-  watch: {
-    start () {
-      if (this.start) {
-        this.startCountdown()
-      } else {
-        this.stopCountdown()
-      }
+    return {
+      counter: 0,
+      counterId: null,
+      continue: true
     }
   },
 
   methods: {
-    startCountdown () {
-      this.counter = this.time
+    start (time) {
+      // Reset current countdown
+      this.stop()
+      this.counter = time
+      this.continue = true
 
       this.counterId = setInterval(() => {
-        if (this.counter > 0) {
+        if (this.counter > 0 && this.continue) {
           this.counter--
         } else {
           this.$emit('finalized')
-          this.stopCountdown()
+          this.stop()
         }
       }, 1000)
     },
 
-    stopCountdown () {
+    stop () {
+      this.continue = false
       clearInterval(this.counterId)
+      this.counterId = null
     }
   }
 }
