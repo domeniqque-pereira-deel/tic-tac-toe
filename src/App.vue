@@ -142,7 +142,7 @@ export default {
     return {
       message: '',
       showCredits: false,
-      showInstructions: true
+      showInstructions: false
     }
   },
 
